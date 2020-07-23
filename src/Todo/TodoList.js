@@ -1,5 +1,6 @@
 import React from "react";
 import TodoItem from "./TodoItem";
+import TodoForm from "./TodoForm";
 
 const styles = {
     ul: {
@@ -10,7 +11,7 @@ const styles = {
 function TodoList() {
     const [todos, setTodos] = React.useState([
       { id: 1, title: 'buy bread', completed: false },
-      { id: 2, title: 'buy butter', completed: false },
+      { id: 2, title: 'buy butter', completed: true },
       { id: 3, title: 'buy milk', completed: false }
     ])
 
@@ -23,6 +24,16 @@ function TodoList() {
           return todo
         })
       )
+    }
+
+    function addTodos(params) {
+        let last_id = todos[todos.length - 1].id;
+        todos.push({
+            id: (last_id + 1),
+            title: params.toString(),
+            completed: false
+        })
+        setTodos([...todos])
     }
 
     return(
@@ -38,6 +49,7 @@ function TodoList() {
             })
           }
         </ul>
+        <TodoForm addTodos={addTodos}/>
       </div>
     )
 }
