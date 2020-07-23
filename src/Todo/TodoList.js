@@ -1,6 +1,7 @@
 import React from "react";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
+import ToDoItemModel from "./ToDoItemModel";
 
 const styles = {
     ul: {
@@ -27,12 +28,8 @@ function TodoList() {
     }
 
     function addTodos(params) {
-        let last_id = todos[todos.length - 1].id;
-        todos.push({
-            id: (last_id + 1),
-            title: params.toString(),
-            completed: false
-        })
+        let new_todo = new ToDoItemModel(params)
+        todos.push(new_todo)
         setTodos([...todos])
     }
 
