@@ -11,16 +11,16 @@ const styles = {
 
 function TodoList() {
     const [todos, setTodos] = React.useState([
-      { id: 1, title: 'buy bread', completed: false },
-      { id: 2, title: 'buy butter', completed: true },
-      { id: 3, title: 'buy milk', completed: false }
+      new ToDoItemModel('buy bread'),
+      new ToDoItemModel('buy butter'),
+      new ToDoItemModel('buy milk'),
     ])
 
     function toggleTodos(id) {
       setTodos(
         todos.map(todo => {
           if (id === todo.id) {
-            todo.completed = !todo.completed
+            todo.toggleCompleted()
           }
           return todo
         })
@@ -31,6 +31,17 @@ function TodoList() {
         let new_todo = new ToDoItemModel(params)
         todos.push(new_todo)
         setTodos([...todos])
+    }
+
+    function deleteTodo(id) {
+      let newTodoList = todos.map(todo => {
+        if (id !== todo.id) {
+          return todo
+        } else {
+          todo.delete()
+        }
+      })
+      setTodos(newTodoList)
     }
 
     return(

@@ -8,8 +8,16 @@ class ToDoItemModel {
     }
 
     save() {
-        alert('save on backend imitation')
+        // alert('save on backend imitation')
         return Math.floor(Math.random() * 1000000000);
+    }
+
+    delete() {
+        alert('deleted')
+    }
+
+    toggleCompleted(){
+       this.completed = !this.completed
     }
 }
 
