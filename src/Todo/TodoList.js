@@ -1,21 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import ToDoItemModel from "./ToDoItemModel";
-import Context from "../context";
+import TodoApi from "./api/api";
 
 const styles = {
     ul: {
         listStyle: 'none'
     }
 }
-
 function TodoList() {
-    const [todos, setTodos] = React.useState([
-      new ToDoItemModel('buy bread'),
-      new ToDoItemModel('buy butter'),
-      new ToDoItemModel('buy milk'),
-    ])
+    const [todos, setTodos] = React.useState([])
+
+    useEffect(() => {
+      const fetchData = async () => {
+        const response = await TodoApi.getAll();
+        await setTodos(response)
+      };
+      fetchData();
+    }, []);
 
     function toggleTodos(id) {
       setTodos(

@@ -1,14 +1,34 @@
 import React from "react";
 
 class ToDoItemModel {
-    constructor(title) {
+    constructor(id, title, completed) {
+        this.id = id
         this.title = title
-        this.completed = false
-        this.id = this.save()
+        this.completed = completed
     }
 
     save() {
-        return Math.floor(Math.random() * 1000000000);
+        // let request = new XMLHttpRequest();
+        // request.open('POST', 'http://localhost:3000/todo_items');
+        // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        //
+        // request.onload = function() {
+        //     if (this.status >= 200 && this.status < 400) {
+        //         // Success!
+        //
+        //        console.log('yes')
+        //
+        //         // let data = JSON.parse(this.response);
+        //         // console.log(data)
+        //     } else {
+        //         // We reached our target server, but it returned an error
+        //         console.log('no')
+        //     }
+        // };
+        // request.onerror = function() {
+        //     console.log('error')
+        // };
+        // request.send(this);
     }
 
     delete() {
@@ -19,5 +39,6 @@ class ToDoItemModel {
        this.completed = !this.completed
     }
 }
+
 
 export default ToDoItemModel
