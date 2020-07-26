@@ -23,7 +23,7 @@ class TodoApi {
     };
 
     request.send();
-    console.log(todos)
+    // console.log(todos)
     return todos
   }
 }

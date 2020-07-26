@@ -11,15 +11,21 @@ const styles = {
     }
 }
 function TodoList() {
+    console.log(TodoApi.getAll())
     const [todos, setTodos] = React.useState([])
+  // TodoApi.getAll()
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const response = await TodoApi.getAll();
-        await setTodos(response)
-      };
-      fetchData();
-    }, []);
+
+    // useEffect(() => {
+    //   const fetchData = async () => {
+    //     const response = await TodoApi.getAll();
+    //     await setTodos(response)
+    //   };
+    //   fetchData();
+    // }, []);
+
+    // const response = TodoApi.getAll();
+    // setTodos(response)
 
     function toggleTodos(id) {
       setTodos(
