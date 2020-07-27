@@ -1,34 +1,21 @@
 import React from "react";
+import TodoApi from "./api/api";
 
 class ToDoItemModel {
-    constructor(id, title, completed) {
+    constructor(id = null, title, completed = false) {
         this.id = id
         this.title = title
         this.completed = completed
     }
 
     save() {
-        // let request = new XMLHttpRequest();
-        // request.open('POST', 'http://localhost:3000/todo_items');
-        // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        //
-        // request.onload = function() {
-        //     if (this.status >= 200 && this.status < 400) {
-        //         // Success!
-        //
-        //        console.log('yes')
-        //
-        //         // let data = JSON.parse(this.response);
-        //         // console.log(data)
-        //     } else {
-        //         // We reached our target server, but it returned an error
-        //         console.log('no')
-        //     }
-        // };
-        // request.onerror = function() {
-        //     console.log('error')
-        // };
-        // request.send(this);
+        let result = TodoApi.save(this)
+        if (result !== false) {
+            this.id = result.id
+            return true
+        } else {
+            return false
+        }
     }
 
     delete() {

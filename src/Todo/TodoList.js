@@ -18,13 +18,12 @@ function TodoList() {
     async function firstAsync() {
         if (loaded === false) {
             let promise = new Promise((res, rej) => {
-                res(TodoApi.getAll())
+                setTimeout(() => res(TodoApi.getAll()), 2000)
+
             });
 
-            // wait until the promise returns us a value
             let result = await promise;
 
-            // "Now it's done!"
             setLoad(true)
             setTodos([...result])
         }
@@ -43,9 +42,14 @@ function TodoList() {
     }
 
     function addTodos(params) {
-        let new_todo = new ToDoItemModel(params)
-        todos.push(new_todo)
-        setTodos([...todos])
+        let new_todo = new ToDoItemModel(null,params ,false)
+        if (new_todo.save() === true) {
+            todos.push(new_todo)
+            setTodos([...todos])
+        } else {
+            new_todo = null
+            alert('smth went wrong')
+        }
     }
 
     function deleteTodo(id) {
@@ -63,6 +67,11 @@ function TodoList() {
       <Context.Provider value={{deleteTodo}} >
         <div>
           <h1>My ToDo list</h1>
+            { loaded === false &&
+            <h2>
+               Loading...
+            </h2>
+            }
           <ul style={styles.ul}>
             {
               todos.map((todo,index) => {
