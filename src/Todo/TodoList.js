@@ -10,22 +10,26 @@ const styles = {
         listStyle: 'none'
     }
 }
+
 function TodoList() {
-    console.log(TodoApi.getAll())
+    const [loaded, setLoad] = React.useState(false)
     const [todos, setTodos] = React.useState([])
-  // TodoApi.getAll()
 
+    async function firstAsync() {
+        if (loaded === false) {
+            let promise = new Promise((res, rej) => {
+                res(TodoApi.getAll())
+            });
 
-    // useEffect(() => {
-    //   const fetchData = async () => {
-    //     const response = await TodoApi.getAll();
-    //     await setTodos(response)
-    //   };
-    //   fetchData();
-    // }, []);
+            // wait until the promise returns us a value
+            let result = await promise;
 
-    // const response = TodoApi.getAll();
-    // setTodos(response)
+            // "Now it's done!"
+            setLoad(true)
+            setTodos([...result])
+        }
+    }
+    firstAsync();
 
     function toggleTodos(id) {
       setTodos(
