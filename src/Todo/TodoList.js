@@ -33,7 +33,8 @@ function TodoList() {
       setTodos(
         todos.map(todo => {
           if (id === todo.id) {
-            todo.toggleCompleted()
+            todo.completed = !todo.completed
+            todo.update()
           }
           return todo
         })

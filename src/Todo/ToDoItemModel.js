@@ -19,11 +19,11 @@ class ToDoItemModel {
     }
 
     delete() {
-        TodoApi.delete(this.id)
+      TodoApi.delete(this.id)
     }
 
-    toggleCompleted(){
-       this.completed = !this.completed
+    update(){
+      TodoApi.update(this)
     }
 }
 
