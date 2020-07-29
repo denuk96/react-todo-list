@@ -2,7 +2,8 @@ import React from "react";
 import ToDoItemModel from "../ToDoItemModel";
 
 const request = new XMLHttpRequest();
-const url = 'http://localhost:3000/todo_items'
+// const url = 'https://young-chamber-53830.herokuapp.com/todo_items/'
+const url = 'http://localhost:3000/todo_items/'
 
 class TodoApi {
   static getAll() {
@@ -32,12 +33,13 @@ class TodoApi {
       let result = false;
       let formData = JSON.stringify(params)
 
-      request.open('POST', url, true);
+      request.open('POST', url, false);
       request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
       request.onload = function () {
         if (this.status >= 200 && this.status < 400) {
             result = JSON.parse(this.response)
+
         }
       }
 
@@ -46,12 +48,13 @@ class TodoApi {
       };
       request.send(formData);
 
+
       return result
   }
 
   static toggleCompleted(id) {
-      let result = false;
-      let formData = JSON.stringify(params)
+      // let result = false;
+      // let formData = JSON.stringify(params)
 
       // request.open('POST', url, true);
       // request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
@@ -68,6 +71,26 @@ class TodoApi {
       // request.send(formData);
       //
       // return result
+  }
+
+  static delete(id) {
+    let route = url + id
+    console.log(route)
+    request.open('DELETE', route, false);
+    request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+    request.onload = function () {
+      if (this.status >= 200 && this.status < 400) {
+        console.log('deleted')
+      } else {
+        console.log(this.status)
+      }
+    }
+    request.onerror = function () {
+      console.log('error')
+    };
+
+    request.send(null);
   }
 }
 

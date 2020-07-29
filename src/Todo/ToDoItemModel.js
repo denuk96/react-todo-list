@@ -19,7 +19,7 @@ class ToDoItemModel {
     }
 
     delete() {
-        console.log('deleted')
+        TodoApi.delete(this.id)
     }
 
     toggleCompleted(){

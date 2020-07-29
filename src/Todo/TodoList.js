@@ -18,8 +18,7 @@ function TodoList() {
     async function firstAsync() {
         if (loaded === false) {
             let promise = new Promise((res, rej) => {
-                setTimeout(() => res(TodoApi.getAll()), 2000)
-
+                res(TodoApi.getAll())
             });
 
             let result = await promise;
@@ -41,8 +40,8 @@ function TodoList() {
       )
     }
 
-    function addTodos(params) {
-        let new_todo = new ToDoItemModel(null,params ,false)
+    async function addTodos(params) {
+        let new_todo = new ToDoItemModel(null, params ,false)
         if (new_todo.save() === true) {
             todos.push(new_todo)
             setTodos([...todos])
@@ -58,6 +57,7 @@ function TodoList() {
           return todo
         } else {
           todo.delete()
+          todo = null
         }
       })
       setTodos([...newTodoList])
