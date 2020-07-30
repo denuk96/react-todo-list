@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
@@ -12,22 +12,24 @@ const styles = {
 }
 
 function TodoList() {
-    const [loaded, setLoad] = React.useState(false)
-    const [todos, setTodos] = React.useState([])
+    const [loaded, setLoad] = useState(false)
+    const [todos, setTodos] = useState([])
 
-    async function firstAsync() {
-        if (loaded === false) {
-            let promise = new Promise((res, rej) => {
-                res(TodoApi.getAll())
-            });
+    useEffect(
+      function () {
+          if (loaded === false) {
+            setLoad(false)
+            async function loadTodos() {
+              return TodoApi.getAll();
+            }
+            loadTodos().then((result) => {
 
-            let result = await promise;
-
-            setLoad(true)
-            setTodos([...result])
-        }
-    }
-    firstAsync();
+              setLoad(true)
+              setTodos([...result])
+            })
+          }
+      }, []
+    )
 
     function toggleTodos(id) {
       setTodos(
@@ -69,9 +71,9 @@ function TodoList() {
         <div>
           <h1>My ToDo list</h1>
             { loaded === false &&
-            <h2>
-               Loading...
-            </h2>
+              <h2>
+                 Loading...
+              </h2>
             }
           <ul style={styles.ul}>
             {

@@ -13,7 +13,7 @@ class TodoApi {
     request.onload = function() {
         if (this.status >= 200 && this.status < 400) {
           let response = JSON.parse(this.response)
-
+          console.log(this.status)
           response.map(todo => {
             todos.push(new ToDoItemModel(todo.id, todo.title, todo.completed))
           })
