@@ -14,6 +14,7 @@ const styles = {
 function TodoList() {
     const [loaded, setLoad] = useState(false)
     const [todos, setTodos] = useState([])
+    const [formShowed, setForm] = useState(false)
 
     useEffect(() => {
       const fetchData = async () => {
@@ -48,6 +49,7 @@ function TodoList() {
         if (new_todo.save() === true) {
             todos.push(new_todo)
             setTodos([...todos])
+            hideForm()
         } else {
             new_todo = null
             alert('smth went wrong')
@@ -64,6 +66,14 @@ function TodoList() {
         }
       })
       setTodos([...newTodoList])
+    }
+
+    function showForm() {
+      setForm(true)
+    }
+
+    function hideForm() {
+      setForm(false)
     }
 
     return(
@@ -85,7 +95,10 @@ function TodoList() {
               })
             }
           </ul>
-          <TodoForm addTodos={addTodos}/>
+          {formShowed
+            ? <TodoForm addTodos={addTodos}/>
+            : <button className='btn btn-primary' onClick={ showForm.bind(null) }>Add todo</button>
+          }
         </div>
       </Context.Provider>
     )

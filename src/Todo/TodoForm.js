@@ -13,7 +13,7 @@ class TodoForm extends React.Component {
                   New TODO
                   <input type="text" name="todo" id='todoForm'/>
                   </label>
-                  <input type="submit" value="Save" onClick={this.getString.bind(null, this.props)}/>
+                  <input type="submit" value="Save" className='btn btn-info' onClick={this.getString.bind(null, this.props)}/>
             </div>
         );
     }
