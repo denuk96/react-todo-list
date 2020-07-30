@@ -15,19 +15,19 @@ function TodoList() {
     const [loaded, setLoad] = useState(false)
     const [todos, setTodos] = useState([])
 
-    useEffect(
-      function () {
-          if (loaded === false) {
-            setLoad(false)
-            async function loadTodos() {
-              return TodoApi.getAll();
-            }
-            loadTodos().then((result) => {
-
-              setLoad(true)
-              setTodos([...result])
-            })
+    useEffect(() => {
+      const fetchData = async () => {
+          async function loadTodos() {
+            return TodoApi.getAll();
           }
+
+          loadTodos().then((result) => {
+
+            setTodos([...result])
+            setLoad(true)
+          })
+        }
+      fetchData();
       }, []
     )
 
