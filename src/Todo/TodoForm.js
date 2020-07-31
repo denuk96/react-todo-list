@@ -10,14 +10,26 @@ class TodoForm extends React.Component {
        }
     }
 
+    hideThis(props) {
+      if (props.new === false) {
+        props.hideFormAfterSave()
+      }
+    }
+
+
     render() {
         return (
             <div>
                <label>
-                  New TODO
+                  {
+                    this.props.new
+                    ? 'New TODO'
+                    : 'Update todo'
+                  }
                   <input type="text" name="todo" id='todoForm'/>
                   </label>
-                  <input type="submit" value="Save" className='btn btn-info' onClick={this.getString.bind(null, this.props)}/>
+                  <input type="submit" value="Save" className='btn btn-info'
+                         onClick={() =>{ this.getString(this.props); this.hideThis(this.props) } }/>
             </div>
         );
     }

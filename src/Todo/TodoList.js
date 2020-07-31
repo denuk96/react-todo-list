@@ -8,7 +8,11 @@ import TodoApi from "./api/api";
 const styles = {
     ul: {
         listStyle: 'none'
+    },
+    inline: {
+        display: 'inline-block'
     }
+
 }
 
 function TodoList() {
@@ -103,12 +107,19 @@ function TodoList() {
                 return <TodoItem todo={todo}
                                  key={todo.id}
                                  index={index}
-                                  onChange={toggleTodos}/>
+                                 onChange={toggleTodos}/>
               })
             }
           </ul>
           {formShowed
-            ? <TodoForm addTodos={addTodos} new={true}/>
+            ? <div style={styles.inline} >
+                <div style={styles.inline} >
+                  <TodoForm addTodos={addTodos} new={true}/>
+                </div>
+                <div style={styles.inline} >
+                  <button className='btn btn-primary' onClick={hideForm.bind(null)}>Close</button>
+                </div>
+              </div>
             : <button className='btn btn-primary' onClick={ showForm.bind(null) }>Add todo</button>
           }
         </div>

@@ -1,7 +1,8 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import PropTypes from 'prop-types'
 import Context from "../context";
 import TodoForm from "./TodoForm";
+import TodoApi from "./api/api";
 
 const styles = {
   li: {
@@ -17,8 +18,8 @@ const styles = {
 
 function TodoItem({todo, index, onChange}) {
   const [showedForm, setForm] = useState(false)
-  let { deleteTodo, updateTodo } = useContext(Context)
-  let classes = []
+  const { deleteTodo, updateTodo } = useContext(Context)
+  const classes = []
 
   if (todo.completed === true) {
     classes.push('todo-done')
@@ -28,25 +29,33 @@ function TodoItem({todo, index, onChange}) {
     setForm(!showedForm)
   }
 
+  function hideFormAfterSave() {
+    toggleForm()
+  }
+
   return(
-    <li style={styles.li}>
-          <span className={classes.join(' ')}>
+    <li>
+      <div style={styles.li}>
+        <span className={classes.join(' ')}>
             <input type="checkbox" onChange={() => onChange(todo.id)} checked={ todo.completed } />
             <strong>{index + 1}</strong>
-            &nbsp;
-            {todo.title}
-          </span>
+          &nbsp;
+          {todo.title}
+      </span>
+        <div className='todo_buttons'>
+          <button onClick={toggleForm}>
+            edit
+          </button>
+          <button onClick={deleteTodo.bind(null, todo.id)}>
+            &times;
+          </button>
+        </div>
+      </div>
 
-
-      <button onClick={toggleForm}>
-        edit
-      </button>
-      <button onClick={deleteTodo.bind(null, todo.id)}>
-        &times;
-      </button>
-      {showedForm
-        ? <TodoForm updateTodo={updateTodo} new={false} todoItemId={todo.id}/>
-        : ''
+      { showedForm === true &&
+        <div>
+          <TodoForm updateTodo={updateTodo} new={false} todoItemId={todo.id} hideFormAfterSave={hideFormAfterSave}/>
+        </div>
       }
     </li>
   )

@@ -21,3 +21,12 @@ code {
 .todo-done {
   text-decoration: line-through;
 }
+
+.todo_update_form {
+  justify-content: space-between;
+  align-content: flex-start;
+}
+
+.todo_buttons {
+  float: right;
+}
