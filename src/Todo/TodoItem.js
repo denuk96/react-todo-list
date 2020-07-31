@@ -64,6 +64,7 @@ function TodoItem({todo, index, showTodoUpdateForm, onChange}) {
 TodoItem.propTypes = {
   todo: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
+  showTodoUpdateForm: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired
 }
 
