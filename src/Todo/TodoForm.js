@@ -2,8 +2,12 @@ import React from "react";
 
 class TodoForm extends React.Component {
     getString(props) {
-        let text = document.getElementById('todoForm').value
-        props.addTodos(text)
+       let text = document.getElementById('todoForm').value
+       if (props.new === true) {
+         props.addTodos(text)
+       } else {
+         props.updateTodo(props.todoItemId, text)
+       }
     }
 
     render() {

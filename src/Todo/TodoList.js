@@ -32,6 +32,18 @@ function TodoList() {
       }, []
     )
 
+    async function addTodos(params) {
+        let new_todo = new ToDoItemModel(null, params ,false)
+        if (new_todo.save() === true) {
+            todos.push(new_todo)
+            setTodos([...todos])
+            hideForm()
+        } else {
+            new_todo = null
+            alert('smth went wrong')
+        }
+    }
+
     function toggleTodos(id) {
       setTodos(
         todos.map(todo => {
@@ -44,16 +56,16 @@ function TodoList() {
       )
     }
 
-    async function addTodos(params) {
-        let new_todo = new ToDoItemModel(null, params ,false)
-        if (new_todo.save() === true) {
-            todos.push(new_todo)
-            setTodos([...todos])
-            hideForm()
-        } else {
-            new_todo = null
-            alert('smth went wrong')
-        }
+    function updateTodo(id, title) {
+      setTodos(
+        todos.map(todo => {
+          if (id === todo.id) {
+            todo.title = title
+            todo.update()
+          }
+          return todo
+        })
+      )
     }
 
     function deleteTodo(id) {
@@ -77,7 +89,7 @@ function TodoList() {
     }
 
     return(
-      <Context.Provider value={{deleteTodo}} >
+      <Context.Provider value={{deleteTodo, updateTodo}} >
         <div>
           <h1>My ToDo list</h1>
             { loaded === false &&
@@ -96,7 +108,7 @@ function TodoList() {
             }
           </ul>
           {formShowed
-            ? <TodoForm addTodos={addTodos}/>
+            ? <TodoForm addTodos={addTodos} new={true}/>
             : <button className='btn btn-primary' onClick={ showForm.bind(null) }>Add todo</button>
           }
         </div>

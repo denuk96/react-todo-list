@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import React, {useContext, useState} from "react";
 import PropTypes from 'prop-types'
 import Context from "../context";
+import TodoForm from "./TodoForm";
 
 const styles = {
   li: {
@@ -15,11 +16,16 @@ const styles = {
 }
 
 function TodoItem({todo, index, onChange}) {
-  let { deleteTodo } = useContext(Context)
+  const [showedForm, setForm] = useState(false)
+  let { deleteTodo, updateTodo } = useContext(Context)
   let classes = []
 
   if (todo.completed === true) {
     classes.push('todo-done')
+  }
+
+  function toggleForm() {
+    setForm(!showedForm)
   }
 
   return(
@@ -30,9 +36,18 @@ function TodoItem({todo, index, onChange}) {
             &nbsp;
             {todo.title}
           </span>
+
+
+      <button onClick={toggleForm}>
+        edit
+      </button>
       <button onClick={deleteTodo.bind(null, todo.id)}>
         &times;
       </button>
+      {showedForm
+        ? <TodoForm updateTodo={updateTodo} new={false} todoItemId={todo.id}/>
+        : ''
+      }
     </li>
   )
 }
