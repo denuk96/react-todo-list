@@ -6,6 +6,7 @@ class ToDoItemModel {
         this.id = id
         this.title = title
         this.completed = completed
+        this.showForm = false
     }
 
     save() {

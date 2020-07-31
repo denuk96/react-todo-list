@@ -16,17 +16,17 @@ const styles = {
   }
 }
 
-function TodoItem({todo, index, onChange}) {
-  const [showedForm, setForm] = useState(false)
+function TodoItem({todo, index, showTodoUpdateForm, onChange}) {
   const { deleteTodo, updateTodo } = useContext(Context)
   const classes = []
+
 
   if (todo.completed === true) {
     classes.push('todo-done')
   }
 
   function toggleForm() {
-    setForm(!showedForm)
+    showTodoUpdateForm(todo.id)
   }
 
   function hideFormAfterSave() {
@@ -52,7 +52,7 @@ function TodoItem({todo, index, onChange}) {
         </div>
       </div>
 
-      { showedForm === true &&
+      { todo.showForm === true &&
         <div>
           <TodoForm updateTodo={updateTodo} new={false} todoItemId={todo.id} hideFormAfterSave={hideFormAfterSave}/>
         </div>

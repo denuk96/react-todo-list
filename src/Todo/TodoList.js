@@ -20,6 +20,8 @@ function TodoList() {
     const [todos, setTodos] = useState([])
     const [formShowed, setForm] = useState(false)
 
+    const [formTodoId, setTodoFormId] = useState(null)
+
     useEffect(() => {
       const fetchData = async () => {
           async function loadTodos() {
@@ -84,6 +86,19 @@ function TodoList() {
       setTodos([...newTodoList])
     }
 
+    function showTodoUpdateForm(id) {
+      setTodos(
+        todos.map(todo => {
+          if (id === todo.id) {
+            todo.showForm = !todo.showForm
+          } else {
+            todo.showForm = false
+          }
+          return todo
+        })
+      )
+    }
+
     function showForm() {
       setForm(true)
     }
@@ -107,6 +122,7 @@ function TodoList() {
                 return <TodoItem todo={todo}
                                  key={todo.id}
                                  index={index}
+                                 showTodoUpdateForm={showTodoUpdateForm}
                                  onChange={toggleTodos}/>
               })
             }
