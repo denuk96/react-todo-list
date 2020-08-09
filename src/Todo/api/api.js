@@ -1,5 +1,5 @@
 import React from "react";
-import ToDoItemModel from "../ToDoItemModel";
+import ToDoItemModel from "../model/ToDoItemModel";
 
 const request = new XMLHttpRequest();
 const url = 'https://young-chamber-53830.herokuapp.com/todo_items/'

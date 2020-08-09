@@ -1,5 +1,5 @@
 import React from "react";
-import TodoApi from "./api/api";
+import TodoApi from "../api/api";
 
 class ToDoItemModel {
     constructor(id = null, title, completed = false) {

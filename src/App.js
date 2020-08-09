@@ -2,12 +2,12 @@ import React from 'react';
 import Header from "./shared/header";
 import Main from "./shared/main";
 import Store from "./store/store";
-import rootReducer from "./store/rootReducer";
+import todoReducer from "./Todo/store/todoReducer";
 // import logo from './logo.svg';
 // import './App.css';
 
 function App() {
-  window.store = Store(rootReducer, {})
+  window.store = Store(todoReducer, {})
 
   return (
       <div className='wrapper'>

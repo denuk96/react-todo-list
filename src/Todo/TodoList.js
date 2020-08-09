@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
+import {addTodo, deleteTodos, toggleTodo, updateTodos} from "./store/types";
 
 const styles = {
     ul: {
@@ -19,8 +20,8 @@ function TodoList() {
     // const [loaded, setLoad] = useState(false)
     const [todos, setTodos] = useState([...todosStore.getState()])
     const [formShowed, setForm] = useState(false)
-
     const [formTodoId, setTodoFormId] = useState(null)
+
     todosStore.subscribe(() => reactOnChanges())
 
     function reactOnChanges() {
@@ -46,19 +47,19 @@ function TodoList() {
     // )
 
     async function addTodos(params) {
-      todosStore.dispatch({type: 'AddTodos'}, params)
+      todosStore.dispatch({type: addTodo}, params)
     }
 
     function toggleTodos(id) {
-      todosStore.dispatch({type: 'toggleTodos'}, id)
+      todosStore.dispatch({type: toggleTodo}, id)
     }
 
     function updateTodo(id, title) {
-      todosStore.dispatch({type: 'updateTodo'}, {id: id, title: title})
+      todosStore.dispatch({type: updateTodos}, {id: id, title: title})
     }
 
     function deleteTodo(id) {
-      todosStore.dispatch({type: 'deleteTodo'}, {id: id})
+      todosStore.dispatch({type: deleteTodos}, {id: id})
     }
 
     function showTodoUpdateForm(id) {

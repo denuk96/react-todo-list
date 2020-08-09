@@ -1,20 +1,21 @@
-import TodoApi from "../Todo/api/api";
-import ToDoItemModel from "../Todo/ToDoItemModel";
+import TodoApi from "../api/api";
+import ToDoItemModel from "../model/ToDoItemModel";
+import {addTodo, deleteTodos, toggleTodo, updateTodos} from "./types";
 
-function rootReducer(state, action, params = null) {
+function todoReducer(state, action, params = null) {
   switch (action.type) {
     case '__init__':
       state = TodoApi.getAll();
       break
 
-    case 'AddTodos':
+    case addTodo:
       let new_todo = new ToDoItemModel(null, params ,false)
       if (new_todo.save() === true) {
         state.push(new_todo)
       }
       break
 
-    case 'toggleTodos':
+    case toggleTodo:
       state.map(todo => {
         if (params === todo.id) {
           todo.completed = !todo.completed
@@ -23,7 +24,7 @@ function rootReducer(state, action, params = null) {
       })
       break
 
-    case 'updateTodo':
+    case updateTodos:
       state.map(todo => {
         if (params.id === todo.id) {
           todo.title = params.title
@@ -32,7 +33,8 @@ function rootReducer(state, action, params = null) {
         return todo
       })
       break
-    case 'deleteTodo':
+
+    case deleteTodos:
       state = state.filter(todo => {
         if (params.id !== todo.id) {
           return todo
@@ -46,4 +48,4 @@ function rootReducer(state, action, params = null) {
   return state
 }
 
-export default rootReducer
+export default todoReducer
