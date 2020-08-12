@@ -47,19 +47,19 @@ function TodoList() {
     // )
 
     async function addTodos(params) {
-      todosStore.dispatch({type: addTodo}, params)
+      todosStore.dispatch({type: addTodo, title: params})
     }
 
     function toggleTodos(id) {
-      todosStore.dispatch({type: toggleTodo}, id)
+      todosStore.dispatch({type: toggleTodo, id: id})
     }
 
     function updateTodo(id, title) {
-      todosStore.dispatch({type: updateTodos}, {id: id, title: title})
+      todosStore.dispatch({type: updateTodos, id: id, title: title})
     }
 
     function deleteTodo(id) {
-      todosStore.dispatch({type: deleteTodos}, {id: id})
+      todosStore.dispatch({type: deleteTodos, id: id})
     }
 
     function showTodoUpdateForm(id) {

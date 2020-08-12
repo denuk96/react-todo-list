@@ -3,8 +3,8 @@ function Store(rootReducer, initialState) {
   let subscribers = []
 
   return {
-    dispatch(action, params = null) {
-      state = rootReducer(state, action, params)
+    dispatch(action) {
+      state = rootReducer(state, action)
       subscribers.forEach(sub => sub())
     },
 
