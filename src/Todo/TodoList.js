@@ -16,6 +16,7 @@ const styles = {
 
 function TodoList() {
     const todosStore = window.store
+    console.log(todosStore.getState())
 
     // const [loaded, setLoad] = useState(false)
     const [todos, setTodos] = useState([...todosStore.getState()])
