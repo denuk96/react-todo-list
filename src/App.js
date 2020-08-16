@@ -7,7 +7,7 @@ import todoReducer from "./Todo/store/todoReducer";
 // import './App.css';
 
 function App() {
-  window.store = createStore(todoReducer, [])
+  window.store = createStore(todoReducer, todoReducer([], {type: '__init__'}))
 
   return (
       <div className='wrapper'>

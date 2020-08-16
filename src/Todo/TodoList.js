@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
-import {addTodo, deleteTodos, toggleTodo, updateTodos} from "./store/types";
+import {addTodoAction, toggleTodoAction, updateTodoAction, deleteTodoAction} from "./store/types";
 
 const styles = {
     ul: {
@@ -48,19 +48,19 @@ function TodoList() {
     // )
 
     async function addTodos(params) {
-      todosStore.dispatch({type: addTodo, title: params})
+      todosStore.dispatch(addTodoAction(params))
     }
 
     function toggleTodos(id) {
-      todosStore.dispatch({type: toggleTodo, id: id})
+      todosStore.dispatch(toggleTodoAction(id))
     }
 
     function updateTodo(id, title) {
-      todosStore.dispatch({type: updateTodos, id: id, title: title})
+      todosStore.dispatch(updateTodoAction(id, title))
     }
 
     function deleteTodo(id) {
-      todosStore.dispatch({type: deleteTodos, id: id})
+      todosStore.dispatch(deleteTodoAction(id))
     }
 
     function showTodoUpdateForm(id) {
