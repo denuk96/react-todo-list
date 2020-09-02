@@ -1,3 +1,6 @@
+import TodoApi from "../api/api";
+import ToDoItemModel from "../model/ToDoItemModel";
+
 export const addTodoAction = title => {
   return {
     type: 'todos/addTodo',
@@ -6,6 +9,36 @@ export const addTodoAction = title => {
     }
   }
 }
+
+export function addTodoActionAsync(params) {
+  return function(dispatch) {
+    // let new_todo = new ToDoItemModel(null, params ,false)
+    //
+    // async function f() {
+    //   new_todo.save()
+    // }
+    // return f().then(() => {
+    //   dispatch(addTodoAction(params))
+    // })
+
+
+    let new_todo = new ToDoItemModel(null, params ,false)
+
+    async function f() {
+      new_todo.save()
+    }
+
+    return f().then(() => {
+      dispatch(addTodoAction(new_todo))
+    });
+
+
+    return {
+      type: "load"
+    }
+  };
+}
+
 
 export const toggleTodoAction = id => {
   return {

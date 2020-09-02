@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useState} from "react";
 import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
-import {addTodoAction, toggleTodoAction, updateTodoAction, deleteTodoAction} from "./store/types";
+import { connect } from 'react-redux';
+import {addTodoAction, toggleTodoAction, updateTodoAction, deleteTodoAction, addTodoActionAsync} from "./store/types";
 
 const styles = {
     ul: {
@@ -14,19 +15,22 @@ const styles = {
 
 }
 
-function TodoList() {
-    const todosStore = window.store
-    console.log(todosStore.getState())
+function TodoList(props) {
+    console.log(props)
+    console.log(props.todos.todoReducer.length)
+    // const todosStore = window.store
+    console.log('todoList rendered')
 
     // const [loaded, setLoad] = useState(false)
-    const [todos, setTodos] = useState([...todosStore.getState()])
+    const [todos, setTodos] = useState([])
+    // const [todos, setTodos] = useState([...todosStore.getState()])
     const [formShowed, setForm] = useState(false)
     const [formTodoId, setTodoFormId] = useState(null)
 
-    todosStore.subscribe(() => reactOnChanges())
+    // todosStore.subscribe(() => reactOnChanges())
 
     function reactOnChanges() {
-      setTodos([...todosStore.getState()])
+      // setTodos([...todosStore.getState()])
       hideForm()
     }
 
@@ -47,20 +51,22 @@ function TodoList() {
     //   }, []
     // )
 
-    async function addTodos(params) {
-      todosStore.dispatch(addTodoAction(params))
+    function addTodos(title) {
+      props.addTodos(title)
+      // todosStore.dispatch(addTodoActionAsync(title))
     }
 
     function toggleTodos(id) {
-      todosStore.dispatch(toggleTodoAction(id))
+      // todosStore.dispatch(toggleTodoAction(id))
     }
 
     function updateTodo(id, title) {
-      todosStore.dispatch(updateTodoAction(id, title))
+      // todosStore.dispatch(updateTodoAction(id, title))
     }
 
     function deleteTodo(id) {
-      todosStore.dispatch(deleteTodoAction(id))
+      props.deleteTodos(id)
+      // todosStore.dispatch(deleteTodoAction(id))
     }
 
     function showTodoUpdateForm(id) {
@@ -95,7 +101,7 @@ function TodoList() {
             {/*}*/}
           <ul style={styles.ul}>
             {
-              todos.map((todo,index) => {
+              props.todos.todoReducer.map((todo,index) => {
                 return <TodoItem todo={todo}
                                  key={todo.id}
                                  index={index}
@@ -120,4 +126,18 @@ function TodoList() {
     )
 }
 
-export default TodoList
+const mapStateToProps = (state) => {
+  return {
+    todos: state
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTodos: (params) => dispatch(addTodoActionAsync(params)),
+    deleteTodos: (id) => dispatch(deleteTodoAction(id))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
+// export default TodoList
