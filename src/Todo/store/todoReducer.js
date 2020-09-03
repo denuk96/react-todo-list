@@ -1,15 +1,9 @@
 import TodoApi from "../api/api";
-import ToDoItemModel from "../model/ToDoItemModel";
 
-function todoReducer(state = TodoApi.getAll(), action) {
+export default function todoReducer(state = TodoApi.getAll(), action) {
   switch (action.type) {
     case 'todos/addTodo':
-      // console.log(action)
       return [...state, action.playload.title]
-      // let new_todo = new ToDoItemModel(null, action.playload.title ,false)
-      // if (new_todo.save() === true) {
-      //   state.push(new_todo)
-      // }
 
     case 'todos/toggleTodo':
       return state.map(todo => {
@@ -17,6 +11,7 @@ function todoReducer(state = TodoApi.getAll(), action) {
           todo.completed = !todo.completed
           todo.update()
         }
+        return todo
       })
 
     case 'todos/updateTodo':
@@ -38,9 +33,17 @@ function todoReducer(state = TodoApi.getAll(), action) {
         }
       })
 
+    case 'todos/toggleForm':
+      return state.map(todo => {
+        if (action.playload.id === todo.id) {
+          todo.showForm = !todo.showForm
+        } else {
+          todo.showForm = false
+        }
+        return todo
+      })
+
     default:
       return TodoApi.getAll();
   }
 }
-
-export default todoReducer

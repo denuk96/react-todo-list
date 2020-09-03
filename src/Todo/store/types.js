@@ -12,16 +12,6 @@ export const addTodoAction = title => {
 
 export function addTodoActionAsync(params) {
   return function(dispatch) {
-    // let new_todo = new ToDoItemModel(null, params ,false)
-    //
-    // async function f() {
-    //   new_todo.save()
-    // }
-    // return f().then(() => {
-    //   dispatch(addTodoAction(params))
-    // })
-
-
     let new_todo = new ToDoItemModel(null, params ,false)
 
     async function f() {
@@ -62,6 +52,15 @@ export const updateTodoAction = (id, title) => {
 export const deleteTodoAction = id => {
   return {
     type: 'todos/deleteTodo',
+    playload: {
+      id: id
+    }
+  }
+}
+
+export const ToggleFormTodoAction = id => {
+  return {
+    type: 'todos/toggleForm',
     playload: {
       id: id
     }

@@ -16,7 +16,7 @@ const styles = {
   }
 }
 
-function TodoItem({todo, index, showTodoUpdateForm, onChange}) {
+function TodoItem({todo, index, showTodoUpdateForm, toggleTodos}) {
   const { deleteTodo, updateTodo } = useContext(Context)
   const classes = []
 
@@ -37,7 +37,7 @@ function TodoItem({todo, index, showTodoUpdateForm, onChange}) {
     <li>
       <div style={styles.li}>
         <span className={classes.join(' ')}>
-            <input type="checkbox" onChange={() => onChange(todo.id)} checked={ todo.completed } />
+            <input type="checkbox" onChange={toggleTodos.bind(null, todo.id)} />
             <strong>{index + 1}</strong>
           &nbsp;
           {todo.title}

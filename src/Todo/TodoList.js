@@ -3,7 +3,7 @@ import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import { connect } from 'react-redux';
-import {addTodoAction, toggleTodoAction, updateTodoAction, deleteTodoAction, addTodoActionAsync} from "./store/types";
+import {addTodoAction, toggleTodoAction, updateTodoAction, deleteTodoAction, addTodoActionAsync, ToggleFormTodoAction} from "./store/types";
 
 const styles = {
     ul: {
@@ -16,13 +16,15 @@ const styles = {
 }
 
 function TodoList(props) {
-    console.log(props)
-    console.log(props.todos.todoReducer.length)
+    // console.log(props)
+    // console.log(props.todos.todoReducer.length)
     // const todosStore = window.store
     console.log('todoList rendered')
+    console.log(props)
+
 
     // const [loaded, setLoad] = useState(false)
-    const [todos, setTodos] = useState([])
+    // const [todos, setTodos] = useState([])
     // const [todos, setTodos] = useState([...todosStore.getState()])
     const [formShowed, setForm] = useState(false)
     const [formTodoId, setTodoFormId] = useState(null)
@@ -53,33 +55,22 @@ function TodoList(props) {
 
     function addTodos(title) {
       props.addTodos(title)
-      // todosStore.dispatch(addTodoActionAsync(title))
     }
 
     function toggleTodos(id) {
-      // todosStore.dispatch(toggleTodoAction(id))
+      props.toggleTodo(id)
     }
 
     function updateTodo(id, title) {
-      // todosStore.dispatch(updateTodoAction(id, title))
+      props.updateTodo(id, title)
     }
 
     function deleteTodo(id) {
       props.deleteTodos(id)
-      // todosStore.dispatch(deleteTodoAction(id))
     }
 
     function showTodoUpdateForm(id) {
-      setTodos(
-        todos.map(todo => {
-          if (id === todo.id) {
-            todo.showForm = !todo.showForm
-          } else {
-            todo.showForm = false
-          }
-          return todo
-        })
-      )
+      props.toggleForm(id)
     }
 
     function showForm() {
@@ -106,7 +97,7 @@ function TodoList(props) {
                                  key={todo.id}
                                  index={index}
                                  showTodoUpdateForm={showTodoUpdateForm}
-                                 onChange={toggleTodos}/>
+                                 toggleTodos={toggleTodos}/>
               })
             }
           </ul>
@@ -135,7 +126,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addTodos: (params) => dispatch(addTodoActionAsync(params)),
-    deleteTodos: (id) => dispatch(deleteTodoAction(id))
+    deleteTodos: (id) => dispatch(deleteTodoAction(id)),
+    updateTodo: (id, title) => dispatch(updateTodoAction(id, title)),
+    toggleForm: (id) => dispatch(ToggleFormTodoAction(id)),
+    toggleTodo: (id) => dispatch(toggleTodoAction(id))
   };
 };
 
