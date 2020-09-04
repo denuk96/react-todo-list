@@ -16,6 +16,36 @@ export const toggleTodoAction = id => {
   }
 }
 
+export const updateTodoAction = (id, title) => {
+  return {
+    type: 'todos/updateTodo',
+    playload: {
+      id: id,
+      title: title
+    }
+  }
+}
+
+export const deleteTodoAction = id => {
+  return {
+    type: 'todos/deleteTodo',
+    playload: {
+      id: id
+    }
+  }
+}
+
+export const ToggleFormTodoAction = id => {
+  return {
+    type: 'todos/toggleForm',
+    playload: {
+      id: id
+    }
+  }
+}
+
+// ====
+
 export function addTodoActionAsync(params) {
   return function(dispatch) {
     postData('https://young-chamber-53830.herokuapp.com/todo_items/', 'POST', {title: params})
@@ -42,31 +72,29 @@ export function toggleTodoActionAsync(params) {
   }
 }
 
-export const updateTodoAction = (id, title) => {
-  return {
-    type: 'todos/updateTodo',
-    playload: {
-      id: id,
-      title: title
-    }
+export function updateTodoActionAsync(id, title) {
+  return function(dispatch) {
+    postData('https://young-chamber-53830.herokuapp.com/todo_items/'+id, 'PUT', {title: title})
+      .then((data) => {
+        if (data.errors == null) {
+          dispatch(updateTodoAction(id, title))
+        } else {
+          console.log(data.errors)
+        }
+      });
   }
 }
 
-export const deleteTodoAction = id => {
-  return {
-    type: 'todos/deleteTodo',
-    playload: {
-      id: id
-    }
-  }
-}
-
-export const ToggleFormTodoAction = id => {
-  return {
-    type: 'todos/toggleForm',
-    playload: {
-      id: id
-    }
+export function deleteTodoActionAsync(id) {
+  return function(dispatch) {
+    postData('https://young-chamber-53830.herokuapp.com/todo_items/'+id, 'DELETE')
+      .then((data) => {
+        if (data.errors == null) {
+          dispatch(deleteTodoAction(id))
+        } else {
+          console.log(data.errors)
+        }
+      });
   }
 }
 

@@ -18,7 +18,6 @@ export default function todoReducer(state = TodoApi.getAll(), action) {
       return state.map(todo => {
         if (action.playload.id === todo.id) {
           todo.title = action.playload.title
-          todo.update()
         }
         return todo
       })
@@ -27,9 +26,6 @@ export default function todoReducer(state = TodoApi.getAll(), action) {
       return state.filter(todo => {
         if (action.playload.id !== todo.id) {
           return todo
-        } else {
-          todo.delete()
-          todo = null
         }
       })
 

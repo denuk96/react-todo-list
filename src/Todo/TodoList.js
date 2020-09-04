@@ -3,7 +3,7 @@ import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import { connect } from 'react-redux';
-import {toggleTodoActionAsync, updateTodoAction, deleteTodoAction, addTodoActionAsync, ToggleFormTodoAction} from "./store/types";
+import {toggleTodoActionAsync, updateTodoActionAsync, deleteTodoActionAsync, addTodoActionAsync, ToggleFormTodoAction} from "./store/types";
 
 const styles = {
     ul: {
@@ -97,12 +97,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addTodos: (params) => dispatch(addTodoActionAsync(params)),
-    deleteTodos: (id) => dispatch(deleteTodoAction(id)),
-    updateTodo: (id, title) => dispatch(updateTodoAction(id, title)),
+    deleteTodos: (id) => dispatch(deleteTodoActionAsync(id)),
+    updateTodo: (id, title) => dispatch(updateTodoActionAsync(id, title)),
     toggleForm: (id) => dispatch(ToggleFormTodoAction(id)),
     toggleTodo: (todo) => dispatch(toggleTodoActionAsync(todo))
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
-// export default TodoList
