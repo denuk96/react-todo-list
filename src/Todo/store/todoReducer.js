@@ -1,14 +1,20 @@
 import TodoApi from "../api/api";
 
-export default function todoReducer(state = TodoApi.getAll(), action) {
-  switch (action.type) {
+export const LOAD_DATA_SUCCESS = 'module_name/LOAD_DATA_SUCCESS'
+
+export default function todoReducer(state = [], action) {
+  const { type, playload } = action
+
+  switch (type) {
+    case LOAD_DATA_SUCCESS:
+      return playload
+
     case 'todos/addTodo':
-      console.log(action.playload.todo)
-      return [...state, action.playload.todo]
+      return [...state, playload.todo]
 
     case 'todos/toggleTodo':
       return state.map(todo => {
-        if (action.playload.id === todo.id) {
+        if (playload.id === todo.id) {
           todo.completed = !todo.completed
         }
         return todo
@@ -16,22 +22,22 @@ export default function todoReducer(state = TodoApi.getAll(), action) {
 
     case 'todos/updateTodo':
       return state.map(todo => {
-        if (action.playload.id === todo.id) {
-          todo.title = action.playload.title
+        if (playload.id === todo.id) {
+          todo.title = playload.title
         }
         return todo
       })
 
     case 'todos/deleteTodo':
       return state.filter(todo => {
-        if (action.playload.id !== todo.id) {
+        if (playload.id !== todo.id) {
           return todo
         }
       })
 
     case 'todos/toggleForm':
       return state.map(todo => {
-        if (action.playload.id === todo.id) {
+        if (playload.id === todo.id) {
           todo.showForm = !todo.showForm
         } else {
           todo.showForm = false

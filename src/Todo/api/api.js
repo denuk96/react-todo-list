@@ -17,6 +17,7 @@ class TodoApi {
           response.map(todo => {
             todos.push(new ToDoItemModel(todo.id, todo.title, todo.completed))
           })
+
         } else {
           console.log('get todos: ', this.status)
         }
