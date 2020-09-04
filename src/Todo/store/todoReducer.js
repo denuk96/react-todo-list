@@ -3,13 +3,13 @@ import TodoApi from "../api/api";
 export default function todoReducer(state = TodoApi.getAll(), action) {
   switch (action.type) {
     case 'todos/addTodo':
-      return [...state, action.playload.title]
+      console.log(action.playload.todo)
+      return [...state, action.playload.todo]
 
     case 'todos/toggleTodo':
       return state.map(todo => {
         if (action.playload.id === todo.id) {
           todo.completed = !todo.completed
-          todo.update()
         }
         return todo
       })
@@ -44,6 +44,6 @@ export default function todoReducer(state = TodoApi.getAll(), action) {
       })
 
     default:
-      return TodoApi.getAll();
+      return state
   }
 }

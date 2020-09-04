@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from "react";
 import PropTypes from 'prop-types'
 import Context from "../context";
 import TodoForm from "./TodoForm";
-import TodoApi from "./api/api";
 
 const styles = {
   li: {
@@ -18,8 +17,8 @@ const styles = {
 
 function TodoItem({todo, index, showTodoUpdateForm, toggleTodos}) {
   const { deleteTodo, updateTodo } = useContext(Context)
+  // const [completed, setCompleted] = useState(todo.completed)
   const classes = []
-
 
   if (todo.completed === true) {
     classes.push('todo-done')
@@ -37,7 +36,7 @@ function TodoItem({todo, index, showTodoUpdateForm, toggleTodos}) {
     <li>
       <div style={styles.li}>
         <span className={classes.join(' ')}>
-            <input type="checkbox" onChange={toggleTodos.bind(null, todo.id)} />
+            <input type="checkbox" onChange={toggleTodos.bind(null, todo)} checked={todo.completed}/>
             <strong>{index + 1}</strong>
           &nbsp;
           {todo.title}

@@ -3,7 +3,7 @@ import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import { connect } from 'react-redux';
-import {addTodoAction, toggleTodoAction, updateTodoAction, deleteTodoAction, addTodoActionAsync, ToggleFormTodoAction} from "./store/types";
+import {toggleTodoActionAsync, updateTodoAction, deleteTodoAction, addTodoActionAsync, ToggleFormTodoAction} from "./store/types";
 
 const styles = {
     ul: {
@@ -12,53 +12,24 @@ const styles = {
     inline: {
         display: 'inline-block'
     }
-
 }
 
 function TodoList(props) {
-    // console.log(props)
-    // console.log(props.todos.todoReducer.length)
-    // const todosStore = window.store
     console.log('todoList rendered')
-    console.log(props)
 
-
-    // const [loaded, setLoad] = useState(false)
-    // const [todos, setTodos] = useState([])
-    // const [todos, setTodos] = useState([...todosStore.getState()])
     const [formShowed, setForm] = useState(false)
     const [formTodoId, setTodoFormId] = useState(null)
 
-    // todosStore.subscribe(() => reactOnChanges())
-
     function reactOnChanges() {
-      // setTodos([...todosStore.getState()])
       hideForm()
     }
-
-
-    // useEffect(() => {
-    //   const fetchData = async () => {
-    //       async function loadTodos() {
-    //         return TodoApi.getAll();
-    //       }
-    //
-    //       loadTodos().then((result) => {
-    //
-    //         setTodos([...result])
-    //         setLoad(true)
-    //       })
-    //     }
-    //   fetchData();
-    //   }, []
-    // )
 
     function addTodos(title) {
       props.addTodos(title)
     }
 
-    function toggleTodos(id) {
-      props.toggleTodo(id)
+    function toggleTodos(todo) {
+      props.toggleTodo(todo)
     }
 
     function updateTodo(id, title) {
@@ -129,7 +100,7 @@ const mapDispatchToProps = (dispatch) => {
     deleteTodos: (id) => dispatch(deleteTodoAction(id)),
     updateTodo: (id, title) => dispatch(updateTodoAction(id, title)),
     toggleForm: (id) => dispatch(ToggleFormTodoAction(id)),
-    toggleTodo: (id) => dispatch(toggleTodoAction(id))
+    toggleTodo: (todo) => dispatch(toggleTodoActionAsync(todo))
   };
 };
 

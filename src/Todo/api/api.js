@@ -3,26 +3,26 @@ import ToDoItemModel from "../model/ToDoItemModel";
 
 const request = new XMLHttpRequest();
 const url = 'https://young-chamber-53830.herokuapp.com/todo_items/'
-// const url = 'http://localhost:3000/todo_items/'
+const requestHeader = ['Content-Type', 'application/json; charset=utf-8']
 
 class TodoApi {
   static getAll() {
     let todos = new Array()
     request.open('GET', url,false);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    request.setRequestHeader(...requestHeader);
     request.onload = function() {
         if (this.status >= 200 && this.status < 400) {
           let response = JSON.parse(this.response)
-          console.log(this.status)
+          console.log('get todos: ', this.status)
           response.map(todo => {
             todos.push(new ToDoItemModel(todo.id, todo.title, todo.completed))
           })
         } else {
-            console.log(this.status)
+          console.log('get todos: ', this.status)
         }
     };
     request.onerror = function() {
-        console.log('error')
+        console.log('get todos: ', 'error')
     };
     request.send();
 
@@ -34,7 +34,7 @@ class TodoApi {
       let formData = JSON.stringify(params)
 
       request.open('POST', url, false);
-      request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      request.setRequestHeader(...requestHeader);
 
       request.onload = function () {
         if (this.status >= 200 && this.status < 400) {
@@ -52,7 +52,7 @@ class TodoApi {
 
   static update(todo) {
     request.open('PUT', url + todo.id, true);
-    request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+    request.setRequestHeader(...requestHeader);
 
     let formData = JSON.stringify(todo)
     request.onload = function () {
@@ -68,7 +68,7 @@ class TodoApi {
 
   static delete(id) {
     request.open('DELETE', url + id, true);
-    request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+    request.setRequestHeader(...requestHeader);
 
     request.onload = function () {
       if (this.status >= 200 && this.status < 400) {
