@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext} from "react";
 import PropTypes from 'prop-types'
 import Context from "../../context";
 import TodoForm from "./TodoForm";
@@ -63,7 +63,7 @@ TodoItem.propTypes = {
   todo: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   showTodoUpdateForm: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired
+  toggleTodos: PropTypes.func.isRequired
 }
 
 export default TodoItem

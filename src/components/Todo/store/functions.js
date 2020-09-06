@@ -5,10 +5,25 @@ import {
   getTodosAction,
   ToggleFormTodoAction,
   toggleTodoAction,
-  updateTodoAction
+  updateTodoAction,
+  showTodosLoader,
+  hideTodosLoader
 } from "./actions";
 
 const link = 'https://young-chamber-53830.herokuapp.com/todo_items/'
+
+export function getTodosActionAsync() {
+  return function(dispatch) {
+    getData(link, 'GET')
+      .then((data) => {
+        if (data.errors == null) {
+          dispatch(getTodosAction(data))
+        } else {
+          console.log(data.errors)
+        }
+      });
+  }
+}
 
 export function addTodoActionAsync(params) {
   return function(dispatch) {
@@ -62,21 +77,20 @@ export function deleteTodoActionAsync(id) {
   }
 }
 
-export function getTodosActionAsync() {
-  return function(dispatch) {
-    getData(link, 'GET')
-      .then((data) => {
-        if (data.errors == null) {
-          dispatch(getTodosAction(data))
-        } else {
-          console.log(data.errors)
-        }
-      });
-  }
-}
-
 export function ToggleFormTodoActionAsync(id) {
   return function(dispatch) {
     dispatch(ToggleFormTodoAction(id))
+  }
+}
+
+export function ShowTodosLoader() {
+  return function(dispatch) {
+    dispatch(showTodosLoader())
+  }
+}
+
+export function HideTodosLoader() {
+  return function(dispatch) {
+    dispatch(hideTodosLoader())
   }
 }

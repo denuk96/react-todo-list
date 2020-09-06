@@ -1,4 +1,4 @@
-import {ADD_TODO, UPDATE_TODO, TOGGLE_FORM, GET_TODOS, DELETE_TODO, TOGGLE_TODO} from "./types";
+import {ADD_TODO, UPDATE_TODO, TOGGLE_FORM, GET_TODOS, DELETE_TODO, TOGGLE_TODO, SHOW_LOADER, HIDE_LOADER} from "./types";
 
 export const addTodoAction = todo => {
   return {
@@ -52,5 +52,19 @@ export const getTodosAction = (todos) => {
     playload: {
       todos: todos
     }
+  }
+}
+
+export const showTodosLoader = () => {
+  return {
+    type: SHOW_LOADER,
+    playload: true
+  }
+}
+
+export const hideTodosLoader = () => {
+  return {
+    type: HIDE_LOADER,
+    playload: false
   }
 }

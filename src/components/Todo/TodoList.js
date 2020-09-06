@@ -1,9 +1,17 @@
 import React, {useState, useEffect} from "react";
 import Context from "../../context";
+import {connect} from 'react-redux';
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
-import { connect } from 'react-redux';
-import {getTodosActionAsync, toggleTodoActionAsync, updateTodoActionAsync, deleteTodoActionAsync, addTodoActionAsync, ToggleFormTodoActionAsync} from "./store/functions";
+import {
+  getTodosActionAsync,
+  toggleTodoActionAsync,
+  updateTodoActionAsync,
+  deleteTodoActionAsync,
+  addTodoActionAsync,
+  ToggleFormTodoActionAsync,
+  ShowTodosLoader} from "./store/functions";
+import {Loader} from "../common/loader";
 
 const styles = {
     ul: {
@@ -22,12 +30,14 @@ function TodoList(props) {
     useEffect(
       () => {
         if (props.todos.length === 0) {
+          props.showLoader()
           props.getTodos()
         }
       }, [],
     );
 
     function addTodos(title) {
+      props.showLoader()
       props.addTodos(title)
       hideForm()
     }
@@ -37,6 +47,7 @@ function TodoList(props) {
     }
 
     function updateTodo(id, title) {
+      props.showLoader()
       props.updateTodo(id, title)
     }
 
@@ -56,15 +67,16 @@ function TodoList(props) {
       setForm(false)
     }
 
+
+
+    if (props.loader === true) {
+      return (<Loader />)
+    }
+
     return(
       <Context.Provider value={{deleteTodo, updateTodo}} >
         <div>
           <h1>My ToDo list</h1>
-            {/*{ loaded === false &&*/}
-            {/*  <h2>*/}
-            {/*     Loading...*/}
-            {/*  </h2>*/}
-            {/*}*/}
           <ul style={styles.ul}>
             {
               props.todos.map((todo,index) => {
@@ -94,7 +106,8 @@ function TodoList(props) {
 
 const mapStateToProps = (state) => {
   return {
-    todos: state.todoReducer.todos
+    todos: state.todoReducer.todos,
+    loader: state.todoReducer.todosLoader
   };
 };
 
@@ -105,7 +118,8 @@ const mapDispatchToProps = (dispatch) => {
     deleteTodos: (id) => dispatch(deleteTodoActionAsync(id)),
     updateTodo: (id, title) => dispatch(updateTodoActionAsync(id, title)),
     toggleForm: (id) => dispatch(ToggleFormTodoActionAsync(id)),
-    toggleTodo: (todo) => dispatch(toggleTodoActionAsync(todo))
+    toggleTodo: (todo) => dispatch(toggleTodoActionAsync(todo)),
+    showLoader: () => dispatch(ShowTodosLoader())
   };
 };
 

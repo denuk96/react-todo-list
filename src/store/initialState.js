@@ -1,3 +1,4 @@
 export const initialState = {
-	todos: []
+	todos: [],
+	todosLoader: false
 }
