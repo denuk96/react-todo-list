@@ -1,4 +1,4 @@
-import {ADD_TODO, TOGGLE_TODO, DELETE_TODO, GET_TODOS, TOGGLE_FORM, UPDATE_TODO} from "../Todo/store/types";
+import {ADD_TODO, TOGGLE_TODO, DELETE_TODO, GET_TODOS, TOGGLE_FORM, UPDATE_TODO} from "../components/Todo/store/types";
 
 export default function todoReducer(state = [], action) {
   const { type, playload } = action

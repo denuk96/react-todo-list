@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import PropTypes from 'prop-types'
-import Context from "../context";
+import Context from "../../context";
 import TodoForm from "./TodoForm";
 
 const styles = {

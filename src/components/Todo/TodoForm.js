@@ -1,7 +1,7 @@
 import React from "react";
 
 class TodoForm extends React.Component {
-    getString(props) {
+   getString(props) {
        let text = document.getElementById('todoForm').value
        if (props.new === true) {
          props.addTodos(text)
@@ -19,7 +19,7 @@ class TodoForm extends React.Component {
 
     render() {
         return (
-            <div>
+            <form>
                <label>
                   {
                     this.props.new
@@ -29,8 +29,8 @@ class TodoForm extends React.Component {
                   <input type="text" name="todo" id='todoForm'/>
                   </label>
                   <input type="submit" value="Save" className='btn btn-info'
-                         onClick={() =>{ this.getString(this.props); this.hideThis(this.props) } }/>
-            </div>
+                         onClick={(e) =>{  e.preventDefault(); this.getString(this.props); this.hideThis(this.props) } }/>
+            </form>
         );
     }
 }

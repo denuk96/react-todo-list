@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import Context from "../context";
+import Context from "../../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import { connect } from 'react-redux';
@@ -30,12 +30,9 @@ function TodoList(props) {
     }, [],
   );
 
-    function reactOnChanges() {
-      hideForm()
-    }
-
     function addTodos(title) {
       props.addTodos(title)
+      hideForm()
     }
 
     function toggleTodos(todo) {

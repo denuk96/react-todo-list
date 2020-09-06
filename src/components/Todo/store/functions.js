@@ -1,4 +1,4 @@
-import {getData, postData} from "../../api/apiDataFetch";
+import {getData, postData} from "../../../api/apiDataFetch";
 import {
   addTodoAction,
   deleteTodoAction,
