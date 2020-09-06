@@ -17,7 +17,6 @@ const styles = {
 
 function TodoItem({todo, index, showTodoUpdateForm, toggleTodos}) {
   const { deleteTodo, updateTodo } = useContext(Context)
-  // const [completed, setCompleted] = useState(todo.completed)
   const classes = []
 
   if (todo.completed === true) {

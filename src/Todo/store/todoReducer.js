@@ -1,5 +1,3 @@
-import TodoApi from "../api/api";
-
 export const LOAD_DATA_SUCCESS = 'module_name/LOAD_DATA_SUCCESS'
 
 export default function todoReducer(state = [], action) {
@@ -44,6 +42,9 @@ export default function todoReducer(state = [], action) {
         }
         return todo
       })
+
+    case 'todos/getTodos':
+      return state = [...playload.todos]
 
     default:
       return state

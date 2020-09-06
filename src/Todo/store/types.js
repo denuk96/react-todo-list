@@ -1,4 +1,4 @@
-import postData from "../../api/apiDataFetch";
+import {postData, getData} from "../../api/apiDataFetch";
 
 const addTodoAction = todo => {
   return {
@@ -42,6 +42,15 @@ export const ToggleFormTodoAction = id => {
     type: 'todos/toggleForm',
     playload: {
       id: id
+    }
+  }
+}
+
+export const getTodosAction = (todos) => {
+  return {
+    type: 'todos/getTodos',
+    playload: {
+      todos: todos
     }
   }
 }
@@ -93,6 +102,19 @@ export function deleteTodoActionAsync(id) {
       .then((data) => {
         if (data.errors == null) {
           dispatch(deleteTodoAction(id))
+        } else {
+          console.log(data.errors)
+        }
+      });
+  }
+}
+
+export function getTodosActionAsync() {
+  return function(dispatch) {
+    getData('https://young-chamber-53830.herokuapp.com/todo_items/', 'GET')
+      .then((data) => {
+        if (data.errors == null) {
+          dispatch(getTodosAction(data))
         } else {
           console.log(data.errors)
         }

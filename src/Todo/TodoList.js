@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import { connect } from 'react-redux';
-import {toggleTodoActionAsync, updateTodoActionAsync, deleteTodoActionAsync, addTodoActionAsync, ToggleFormTodoAction} from "./store/types";
+import {getTodosActionAsync, toggleTodoActionAsync, updateTodoActionAsync, deleteTodoActionAsync, addTodoActionAsync, ToggleFormTodoAction} from "./store/types";
 
 const styles = {
     ul: {
@@ -19,6 +19,16 @@ function TodoList(props) {
 
     const [formShowed, setForm] = useState(false)
     const [formTodoId, setTodoFormId] = useState(null)
+
+  useEffect(
+    () => {
+      if (props.todos.todoReducer.length === 0) {
+        console.log('useEffect')
+        props.getTodos()
+      }
+
+    }, [],
+  );
 
     function reactOnChanges() {
       hideForm()
@@ -96,6 +106,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getTodos: () => dispatch(getTodosActionAsync()),
     addTodos: (params) => dispatch(addTodoActionAsync(params)),
     deleteTodos: (id) => dispatch(deleteTodoActionAsync(id)),
     updateTodo: (id, title) => dispatch(updateTodoActionAsync(id, title)),

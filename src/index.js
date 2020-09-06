@@ -9,9 +9,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
-import TodoApi from "./Todo/api/api";
+import { initialState } from "./store/initialState";
 
-const store = configureStore();
+const store = configureStore(initialState());
 
 ReactDOM.render(
   // <React.StrictMode> TODO: double render
