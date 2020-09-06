@@ -1,16 +1,13 @@
-export const LOAD_DATA_SUCCESS = 'module_name/LOAD_DATA_SUCCESS'
+import {ADD_TODO, TOGGLE_TODO, DELETE_TODO, GET_TODOS, TOGGLE_FORM, UPDATE_TODO} from "../Todo/store/types";
 
 export default function todoReducer(state = [], action) {
   const { type, playload } = action
 
   switch (type) {
-    case LOAD_DATA_SUCCESS:
-      return playload
-
-    case 'todos/addTodo':
+    case ADD_TODO:
       return [...state, playload.todo]
 
-    case 'todos/toggleTodo':
+    case TOGGLE_TODO:
       return state.map(todo => {
         if (playload.id === todo.id) {
           todo.completed = !todo.completed
@@ -18,7 +15,7 @@ export default function todoReducer(state = [], action) {
         return todo
       })
 
-    case 'todos/updateTodo':
+    case UPDATE_TODO:
       return state.map(todo => {
         if (playload.id === todo.id) {
           todo.title = playload.title
@@ -26,14 +23,14 @@ export default function todoReducer(state = [], action) {
         return todo
       })
 
-    case 'todos/deleteTodo':
+    case DELETE_TODO:
       return state.filter(todo => {
         if (playload.id !== todo.id) {
           return todo
         }
       })
 
-    case 'todos/toggleForm':
+    case TOGGLE_FORM:
       return state.map(todo => {
         if (playload.id === todo.id) {
           todo.showForm = !todo.showForm
@@ -43,7 +40,7 @@ export default function todoReducer(state = [], action) {
         return todo
       })
 
-    case 'todos/getTodos':
+    case GET_TODOS:
       return state = [...playload.todos]
 
     default:

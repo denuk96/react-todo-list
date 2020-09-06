@@ -3,7 +3,7 @@ import Context from "../context";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import { connect } from 'react-redux';
-import {getTodosActionAsync, toggleTodoActionAsync, updateTodoActionAsync, deleteTodoActionAsync, addTodoActionAsync, ToggleFormTodoAction} from "./store/types";
+import {getTodosActionAsync, toggleTodoActionAsync, updateTodoActionAsync, deleteTodoActionAsync, addTodoActionAsync, ToggleFormTodoActionAsync} from "./store/functions";
 
 const styles = {
     ul: {
@@ -110,7 +110,7 @@ const mapDispatchToProps = (dispatch) => {
     addTodos: (params) => dispatch(addTodoActionAsync(params)),
     deleteTodos: (id) => dispatch(deleteTodoActionAsync(id)),
     updateTodo: (id, title) => dispatch(updateTodoActionAsync(id, title)),
-    toggleForm: (id) => dispatch(ToggleFormTodoAction(id)),
+    toggleForm: (id) => dispatch(ToggleFormTodoActionAsync(id)),
     toggleTodo: (todo) => dispatch(toggleTodoActionAsync(todo))
   };
 };
