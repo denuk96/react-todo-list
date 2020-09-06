@@ -18,17 +18,14 @@ function TodoList(props) {
     console.log('todoList rendered')
 
     const [formShowed, setForm] = useState(false)
-    const [formTodoId, setTodoFormId] = useState(null)
 
-  useEffect(
-    () => {
-      if (props.todos.todoReducer.length === 0) {
-        console.log('useEffect')
-        props.getTodos()
-      }
-
-    }, [],
-  );
+    useEffect(
+      () => {
+        if (props.todos.length === 0) {
+          props.getTodos()
+        }
+      }, [],
+    );
 
     function addTodos(title) {
       props.addTodos(title)
@@ -70,7 +67,7 @@ function TodoList(props) {
             {/*}*/}
           <ul style={styles.ul}>
             {
-              props.todos.todoReducer.map((todo,index) => {
+              props.todos.map((todo,index) => {
                 return <TodoItem todo={todo}
                                  key={todo.id}
                                  index={index}
@@ -97,7 +94,7 @@ function TodoList(props) {
 
 const mapStateToProps = (state) => {
   return {
-    todos: state
+    todos: state.todoReducer.todos
   };
 };
 
