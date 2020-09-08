@@ -16,7 +16,6 @@ export default function todoReducer(state = initialState, action) {
     case GET_TODOS:
       return state = {...state, todos: state.todos.concat(playload.todos), todosLoader: false}
 
-
     case ADD_TODO:
       return {...state, todos: state.todos.concat(playload.todo), todosLoader: false}
 

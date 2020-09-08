@@ -9,6 +9,7 @@ import {
   showTodosLoader,
   hideTodosLoader
 } from "./actions";
+import {showErrors, showNotices} from "../../Message/store/actions";
 
 const link = 'https://young-chamber-53830.herokuapp.com/todo_items/'
 
@@ -26,13 +27,15 @@ export function getTodosActionAsync() {
 }
 
 export function addTodoActionAsync(params) {
-  return function(dispatch) {
+  return dispatch => {
     postData(link, 'POST', {title: params})
       .then((data) => {
         if (data.errors == null) {
           dispatch(addTodoAction({id: data.id, title: data.title, completed: data.completed}))
+          dispatch(showNotices('Todo added.'))
         } else {
-          console.log(data.errors)
+          dispatch(hideTodosLoader())
+          dispatch(showErrors(data.errors))
         }
       });
   };
@@ -40,6 +43,7 @@ export function addTodoActionAsync(params) {
 
 export function toggleTodoActionAsync(params) {
   return function(dispatch) {
+    dispatch()
     postData(link + params.id, 'PUT', {completed: !params.completed})
       .then((data) => {
         if (data.errors == null) {

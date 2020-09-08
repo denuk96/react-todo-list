@@ -11,7 +11,7 @@ import {
   addTodoActionAsync,
   ToggleFormTodoActionAsync,
   ShowTodosLoader} from "./store/functions";
-import {Loader} from "../common/loader";
+import {Loader} from "../Loader/loader";
 
 const styles = {
     ul: {
@@ -66,8 +66,6 @@ function TodoList(props) {
     function hideForm() {
       setForm(false)
     }
-
-
 
     if (props.loader === true) {
       return (<Loader />)

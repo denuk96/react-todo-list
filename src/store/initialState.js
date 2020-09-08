@@ -1,4 +1,6 @@
 export const initialState = {
 	todos: [],
-	todosLoader: false
+	todosLoader: false,
+	errors: [],
+	notices: []
 }
