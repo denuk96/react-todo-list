@@ -56,13 +56,15 @@ export function toggleTodoActionAsync(params) {
 }
 
 export function updateTodoActionAsync(id, title) {
-  return function(dispatch) {
+  return dispatch => {
     postData(link + id, 'PUT', {title: title})
       .then((data) => {
         if (data.errors == null) {
           dispatch(updateTodoAction(id, title))
+          dispatch(showNotices('Todo updated'))
         } else {
-          console.log(data.errors)
+          dispatch(hideTodosLoader())
+          dispatch(showErrors(data.errors))
         }
       });
   }
