@@ -9,8 +9,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import { initialState } from "./store/initialState";
+import saga from "./store/saga";
+import { sagaMiddleware} from "./store/configureStore";
 
 const store = configureStore(initialState);
+sagaMiddleware.run(saga);
 
 ReactDOM.render(
   // <React.StrictMode> TODO: double render
