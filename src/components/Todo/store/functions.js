@@ -43,7 +43,6 @@ export function addTodoActionAsync(params) {
 
 export function toggleTodoActionAsync(params) {
   return function(dispatch) {
-    dispatch()
     postData(link + params.id, 'PUT', {completed: !params.completed})
       .then((data) => {
         if (data.errors == null) {
