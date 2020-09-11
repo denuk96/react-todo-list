@@ -2,7 +2,6 @@ import { spawn, takeLatest, put, call } from 'redux-saga/effects'
 import { Record } from 'immutable'
 import {getData, postData} from "../api/apiDataFetch";
 
-
 // types
 const moduleName = 'auth'
 
@@ -12,10 +11,10 @@ const SIGN_IN_START = `${moduleName}/signInStart`
 const SIGN_IN_TRY = `${moduleName}/signInTry`
 const SIGN_IN = `${moduleName}/signIn`
 
-
 // reducer
 const ReducerRecord = Record({
 	user: null,
+	signedIn: false,
 	access_token: null,
 })
 
@@ -44,25 +43,23 @@ export function reducer(state = new ReducerRecord(), action) {
 	}
 }
 
+
+
+const tokensFromLocalStorage = () => {
+	return {
+		access_token: window.localStorage.getItem('access_token'),
+		// refresh_token: window.localStorage.getItem('refresh_token')
+	};
+}
+
 function* initAuthSaga() {
+	const localTokens = tokensFromLocalStorage()
 	try {
-		const response = yield call(getData(link, 'GET')
-			.then((data) => {
-				if (data) {
-					return {access_token: '123'}
-				} else {
 
-				}
-			}))
-		if (response != null) {
-			console.log('true123')
-
-			// yield put(signIn(user.access_token))
-		}
 	} catch (e) {
-		console.log('error blabla')
-		console.log(e)
+
 	}
+
 }
 
 export const auth = function*() {
