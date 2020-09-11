@@ -29,23 +29,25 @@ export function getTodosActionAsync() {
 export function addTodoActionAsync(params) {
   return dispatch => {
     postData(link, 'POST', {title: params})
-      .then((data) => {
-        if (data.errors == null) {
+      .then((response) => {
+        const data = response.body
+        if (response.code === 200) {
           dispatch(addTodoAction({id: data.id, title: data.title, completed: data.completed}))
           dispatch(showNotices('Todo added.'))
         } else {
           dispatch(hideTodosLoader())
           dispatch(showErrors(data.errors))
         }
-      });
+      })
   };
 }
 
 export function toggleTodoActionAsync(params) {
   return function(dispatch) {
     postData(link + params.id, 'PUT', {completed: !params.completed})
-      .then((data) => {
-        if (data.errors == null) {
+      .then((response) => {
+        const data = response.body
+        if (response.code === 200) {
           dispatch(toggleTodoAction(params.id))
         } else {
           console.log(data.errors)
@@ -57,8 +59,9 @@ export function toggleTodoActionAsync(params) {
 export function updateTodoActionAsync(id, title) {
   return dispatch => {
     postData(link + id, 'PUT', {title: title})
-      .then((data) => {
-        if (data.errors == null) {
+      .then((response) => {
+        const data = response.body
+        if (response.code === 200) {
           dispatch(updateTodoAction(id, title))
           dispatch(showNotices('Todo updated'))
         } else {
@@ -72,8 +75,9 @@ export function updateTodoActionAsync(id, title) {
 export function deleteTodoActionAsync(id) {
   return function(dispatch) {
     postData(link + id, 'DELETE')
-      .then((data) => {
-        if (data.errors == null) {
+      .then((response) => {
+        const data = response.body
+        if (response.code === 200) {
           dispatch(deleteTodoAction(id))
         } else {
           console.log(data.errors)
