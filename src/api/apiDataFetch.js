@@ -16,7 +16,7 @@ export async function postData(url = '', method = '', data = {}) {
 	return await response.json(); // parses JSON response into native JavaScript objects
 }
 
-export async function getData(url = '', method = '') {
+export async function getData(url = '', method = 'GET') {
 	// Default options are marked with *
 	const response = await fetch(url, {
 		method: method, // *GET, POST, PUT, DELETE, etc.
@@ -30,5 +30,8 @@ export async function getData(url = '', method = '') {
 		redirect: 'follow', // manual, *follow, error
 		referrerPolicy: 'no-referrer', // no-referrer, *client
 	});
-	return await response.json(); // parses JSON response into native JavaScript objects
+	await response
+	if (response.status == 200) {
+		return response.json()  // parses JSON response into native JavaScript objects
+	}
 }
