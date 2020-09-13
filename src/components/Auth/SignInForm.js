@@ -1,15 +1,15 @@
 import React from "react";
-import {Button, Form, Modal} from "react-bootstrap";
-import {useDispatch} from "react-redux";
+import { Button, Modal, Form } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { signInTry } from "../../ducks/auth";
 
-export default function SignInForm({show, toggleSignInForm, onSubmit}) {
+export default function SignInForm({show, toggleSignInForm}) {
 	const dispatch = useDispatch()
-
-	function onSubmit(event) {
-		event.preventDefault()
-		const data = new FormData(event.target);
-
-		console.log(event)
+	const { register, handleSubmit, errors } = useForm();
+	const onSubmit = data => {
+		let {email, password} = data
+		dispatch(signInTry(email, password))
 	}
 
 	return (
@@ -18,10 +18,11 @@ export default function SignInForm({show, toggleSignInForm, onSubmit}) {
 				<Modal.Title>Modal heading</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<Form onSubmit={onSubmit}>
+				<Form onSubmit={handleSubmit(onSubmit)}>
 					<Form.Group controlId="formBasicEmail">
 						<Form.Label>Email address</Form.Label>
-						<Form.Control type="email" placeholder="Enter email" />
+						{errors.email && <p className='warning-message'>Email is required</p>}
+						<Form.Control ref={register({ required: true })}  type="email" name="email" placeholder="Enter email" />
 						<Form.Text className="text-muted">
 							We'll never share your email with anyone else.
 						</Form.Text>
@@ -29,7 +30,8 @@ export default function SignInForm({show, toggleSignInForm, onSubmit}) {
 
 					<Form.Group controlId="formBasicPassword">
 						<Form.Label>Password</Form.Label>
-						<Form.Control type="password" placeholder="Password" />
+						{errors.password && <p className='warning-message'>Password is required</p>}
+						<Form.Control ref={register({ required: true })} type="password" name="password" placeholder="Password" />
 					</Form.Group>
 					<Form.Group controlId="formBasicCheckbox">
 						<Form.Check type="checkbox" label="Check me out" />

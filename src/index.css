@@ -30,3 +30,14 @@ code {
 .todo_buttons {
   float: right;
 }
+
+
+
+.warning-message {
+  color: #e22a2a;
+  animation: blink 2s infinite; /* Параметры анимации */
+}
+@keyframes blink {
+  from { opacity: 1; /* Непрозрачный текст */ }
+  to { opacity: 0; /* Прозрачный текст */ }
+}

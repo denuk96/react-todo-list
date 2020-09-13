@@ -1,27 +1,27 @@
 import { spawn, takeLatest, put, call } from 'redux-saga/effects'
 import { Record } from 'immutable'
 import {getData, postData} from "../api/apiDataFetch";
+import {addTodoAction, hideTodosLoader} from "../components/Todo/store/actions";
+import {showErrors, showNotices} from "../components/Message/store/actions";
 
 // types
 const moduleName = 'auth'
 
-const link = 'https://young-chamber-53830.herokuapp.com/todo_items/'
+const link = 'https://young-chamber-53830.herokuapp.com/'
 
 const SIGN_IN_START = `${moduleName}/signInStart`
 const SIGN_IN_TRY = `${moduleName}/signInTry`
 const SIGN_IN = `${moduleName}/signIn`
 
-// reducer
-const ReducerRecord = Record({
-	user: null,
-	signedIn: false,
-	access_token: null,
-})
 
 // actions
 
-export const signInTry = () => ({
-	type: SIGN_IN_TRY
+export const signInTry = (email, password) => ({
+	type: SIGN_IN_TRY,
+	payload: {
+		email: email,
+		password: password
+	}
 })
 
 export const signIn = (token) => ({
@@ -29,11 +29,21 @@ export const signIn = (token) => ({
 	payload: token
 })
 
+// reducer
+const ReducerRecord = Record({
+	user: null,
+	signedIn: false,
+	access_token: null,
+	errors_from_server: null,
+})
+
 export function reducer(state = new ReducerRecord(), action) {
 	const {type, payload} = action
 
 	switch (type) {
 		case SIGN_IN_TRY:
+			console.log('reducer:', payload)
+			return state
 			// return state.set('access_token', payload)
 		case SIGN_IN:
 			console.log('SIGN_IN')
@@ -44,25 +54,27 @@ export function reducer(state = new ReducerRecord(), action) {
 }
 
 
-
-const tokensFromLocalStorage = () => {
-	return {
-		access_token: window.localStorage.getItem('access_token'),
-		// refresh_token: window.localStorage.getItem('refresh_token')
-	};
+function* initAuthSaga() {
+	console.log('i')
+	// const localTokens = window.localStorage.getItem('access_token')
+	// if (localTokens != null) {
+	//
+	// }
 }
 
-function* initAuthSaga() {
-	const localTokens = tokensFromLocalStorage()
+function* signInRequest(action) {
 	try {
-
-	} catch (e) {
-
+		const response = yield call(
+			postData, `${link}sign_in`, 'POST', action.payload
+		)
+		console.log(response)
+	} catch(e) {
+		console.log('server-error: ')
+		console.log(e)
 	}
-
 }
 
 export const auth = function*() {
 	yield spawn(initAuthSaga)
-	// yield takeLatest(SIGN_IN)
+	yield takeLatest(SIGN_IN_TRY, signInRequest)
 }
