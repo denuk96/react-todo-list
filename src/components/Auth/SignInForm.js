@@ -1,23 +1,44 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { signInTry } from "../../ducks/auth";
+import { Loader } from "../Loader/loader";
 
 export default function SignInForm({show, toggleSignInForm}) {
 	const dispatch = useDispatch()
 	const { register, handleSubmit, errors } = useForm();
-	const onSubmit = data => {
+	const showLoading = useSelector(state => state.authReducer.loading)
+	const errorsFromServer = useSelector(state => state.authReducer.errors_from_server)
+
+	const onSubmit = (data) => {
 		let {email, password} = data
 		dispatch(signInTry(email, password))
+	}
+
+	if (showLoading) {
+		return (
+			<Modal show={show} onHide={toggleSignInForm}>
+				<Modal.Header closeButton>
+				</Modal.Header>
+				<Modal.Body>
+					<Loader/>
+				</Modal.Body>
+			</Modal>
+		)
 	}
 
 	return (
 		<Modal show={show} onHide={toggleSignInForm}>
 			<Modal.Header closeButton>
-				<Modal.Title>Modal heading</Modal.Title>
+				<Modal.Title>Sign in</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
+				{errorsFromServer != null &&
+				<h5 className='warning-message'>
+					{errorsFromServer}
+				</h5>
+				}
 				<Form onSubmit={handleSubmit(onSubmit)}>
 					<Form.Group controlId="formBasicEmail">
 						<Form.Label>Email address</Form.Label>

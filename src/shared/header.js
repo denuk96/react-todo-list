@@ -1,15 +1,18 @@
 import React, {useState} from "react";
 import { Link } from 'react-router-dom'
-import { useSelector } from "react-redux";
-import { Modal, Button, Form } from 'react-bootstrap';
+import {useDispatch, useSelector} from "react-redux";
+import { Button } from 'react-bootstrap';
 import SignInForm from "../components/Auth/SignInForm";
+import {clearError} from "../ducks/auth";
 
 function Header() {
+	const dispatch = useDispatch()
 	const signedIn = useSelector(state => state.authReducer.signedIn)
 	const [showSignForm, setSignForm] = useState(false);
 
 	function toggleSignInForm() {
 		setSignForm(!showSignForm)
+		dispatch(clearError())
 	}
 
 	return (
@@ -29,8 +32,9 @@ function Header() {
 					</ul>
 				</nav>
 			</header>
-
-			<SignInForm show={showSignForm} toggleSignInForm={toggleSignInForm}/>
+			{!signedIn &&
+				<SignInForm show={showSignForm} toggleSignInForm={toggleSignInForm}/>
+			}
 		</>
 	);
 }

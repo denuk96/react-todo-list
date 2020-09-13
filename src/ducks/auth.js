@@ -1,20 +1,22 @@
 import { spawn, takeLatest, put, call } from 'redux-saga/effects'
 import { Record } from 'immutable'
 import {getData, postData} from "../api/apiDataFetch";
-import {addTodoAction, hideTodosLoader} from "../components/Todo/store/actions";
-import {showErrors, showNotices} from "../components/Message/store/actions";
 
 // types
 const moduleName = 'auth'
 
 const link = 'https://young-chamber-53830.herokuapp.com/'
 
-const SIGN_IN_START = `${moduleName}/signInStart`
+const SIGN_IN_LOADING = `${moduleName}/signInLoading`
 const SIGN_IN_TRY = `${moduleName}/signInTry`
 const SIGN_IN = `${moduleName}/signIn`
-
+const SET_ERROR = `${moduleName}/setError`
+const CLEAR_ERROR = `${moduleName}/clearError`
 
 // actions
+export const singInLoading = () => ({
+	type: SIGN_IN_LOADING
+})
 
 export const signInTry = (email, password) => ({
 	type: SIGN_IN_TRY,
@@ -29,10 +31,20 @@ export const signIn = (token) => ({
 	payload: token
 })
 
+export const setError = (error) => ({
+	type: SET_ERROR,
+	payload: error
+})
+
+export const clearError = () => ({
+	type: CLEAR_ERROR
+})
+
 // reducer
 const ReducerRecord = Record({
 	user: null,
 	signedIn: false,
+	loading: false,
 	access_token: null,
 	errors_from_server: null,
 })
@@ -41,13 +53,21 @@ export function reducer(state = new ReducerRecord(), action) {
 	const {type, payload} = action
 
 	switch (type) {
-		case SIGN_IN_TRY:
-			console.log('reducer:', payload)
-			return state
-			// return state.set('access_token', payload)
 		case SIGN_IN:
-			console.log('SIGN_IN')
 			return state.set('access_token', payload)
+									.set('signedIn', true)
+									.set('errors_from_server', null)
+									.set('loading', false)
+
+		case SET_ERROR:
+			return state.set('errors_from_server', payload).set('loading', false)
+
+		case CLEAR_ERROR:
+			return state.set('errors_from_server', null)
+
+		case SIGN_IN_LOADING:
+			return state.set('loading', true)
+
 		default:
 			return state
 	}
@@ -63,14 +83,19 @@ function* initAuthSaga() {
 }
 
 function* signInRequest(action) {
+	yield put(singInLoading())
 	try {
 		const response = yield call(
 			postData, `${link}sign_in`, 'POST', action.payload
 		)
-		console.log(response)
+		if (response.code === 200) {
+			yield put(signIn(response.body.access_token))
+		} else {
+			yield put(setError(response.body.errors))
+		}
+
 	} catch(e) {
-		console.log('server-error: ')
-		console.log(e)
+		yield put(setError('server-error'))
 	}
 }
 
