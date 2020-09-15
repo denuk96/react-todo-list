@@ -1,6 +1,7 @@
 import { spawn, takeLatest, put, call } from 'redux-saga/effects'
 import { Record } from 'immutable'
 import {getData, postData} from "../api/apiDataFetch";
+import {showErrors} from "../components/Message/store/actions";
 
 // types
 const moduleName = 'auth'
@@ -73,13 +74,18 @@ export function reducer(state = new ReducerRecord(), action) {
 	}
 }
 
-
 function* initAuthSaga() {
-	console.log('i')
-	// const localTokens = window.localStorage.getItem('access_token')
-	// if (localTokens != null) {
-	//
-	// }
+	const localTokens = window.localStorage.getItem('access_token')
+	try {
+		const response = yield call(
+			getData, `${link}user_info/?access_token=${localTokens}`, 'GET'
+		)
+		if (response.code === 200) {
+			yield put(signIn(response.body.access_token))
+		}
+	} catch (e) {
+		yield put(showErrors('Auth server error'))
+	}
 }
 
 function* signInRequest(action) {
@@ -89,11 +95,12 @@ function* signInRequest(action) {
 			postData, `${link}sign_in`, 'POST', action.payload
 		)
 		if (response.code === 200) {
-			yield put(signIn(response.body.access_token))
+			const token = response.body.access_token
+			window.localStorage.setItem('access_token', token)
+			yield put(signIn(token))
 		} else {
 			yield put(setError(response.body.errors))
 		}
-
 	} catch(e) {
 		yield put(setError('server-error'))
 	}

@@ -16,11 +16,13 @@ const link = 'https://young-chamber-53830.herokuapp.com/todo_items/'
 export function getTodosActionAsync() {
   return function(dispatch) {
     getData(link, 'GET')
-      .then((data) => {
-        if (data.errors == null) {
+      .then((response) => {
+        console.log(response)
+        const data = response.body
+        if (response.code === 200) {
           dispatch(getTodosAction(data))
         } else {
-          console.log(data.errors)
+          dispatch(showErrors(data.errors))
         }
       });
   }
