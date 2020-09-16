@@ -1,4 +1,4 @@
-export async function postData(url = '', method = '', data = {}) {
+export async function postData(url = '', method = '', data = {}, auth = '') {
 	// Default options are marked with *
 	const response = await fetch(url, {
 		method: method, // *GET, POST, PUT, DELETE, etc.
@@ -6,7 +6,8 @@ export async function postData(url = '', method = '', data = {}) {
 		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 		credentials: 'same-origin', // include, *same-origin, omit
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'Authorization': auth
 			// 'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		redirect: 'follow', // manual, *follow, error

@@ -15,22 +15,23 @@ const link = 'https://young-chamber-53830.herokuapp.com/todo_items/'
 
 export function getTodosActionAsync() {
   return function(dispatch, getState) {
-    console.log(getState())
-    getData(link, 'GET')
+    const access_token = getState().authReducer.access_token
+    getData(link, 'GET', access_token)
       .then((response) => {
         const data = response.body
         if (response.code === 200) {
           dispatch(getTodosAction(data))
         } else {
-          dispatch(showErrors(data.errors))
+          dispatch(hideTodosLoader())
         }
       });
   }
 }
 
 export function addTodoActionAsync(params) {
-  return dispatch => {
-    postData(link, 'POST', {title: params})
+  return (dispatch, getState) => {
+    const access_token = getState().authReducer.access_token
+    postData(link, 'POST', {title: params}, access_token)
       .then((response) => {
         const data = response.body
         if (response.code === 200) {
@@ -45,8 +46,9 @@ export function addTodoActionAsync(params) {
 }
 
 export function toggleTodoActionAsync(params) {
-  return function(dispatch) {
-    postData(link + params.id, 'PUT', {completed: !params.completed})
+  return function(dispatch, getState) {
+    const access_token = getState().authReducer.access_token
+    postData(link + params.id, 'PUT', {completed: !params.completed}, access_token)
       .then((response) => {
         const data = response.body
         if (response.code === 200) {
@@ -59,8 +61,9 @@ export function toggleTodoActionAsync(params) {
 }
 
 export function updateTodoActionAsync(id, title) {
-  return dispatch => {
-    postData(link + id, 'PUT', {title: title})
+  return (dispatch, getState) => {
+    const access_token = getState().authReducer.access_token
+    postData(link + id, 'PUT', {title: title}, access_token)
       .then((response) => {
         const data = response.body
         if (response.code === 200) {
@@ -75,8 +78,9 @@ export function updateTodoActionAsync(id, title) {
 }
 
 export function deleteTodoActionAsync(id) {
-  return function(dispatch) {
-    postData(link + id, 'DELETE')
+  return function(dispatch, getState) {
+    const access_token = getState().authReducer.access_token
+    postData(link + id, 'DELETE', {}, access_token)
       .then((response) => {
         const data = response.body
         if (response.code === 200) {

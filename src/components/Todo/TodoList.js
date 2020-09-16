@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Context from "../../context";
-import {connect} from 'react-redux';
+import {connect, useSelector} from "react-redux";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import {
@@ -23,8 +23,7 @@ const styles = {
 }
 
 function TodoList(props) {
-    console.log('todoList rendered')
-
+    const signedIn = useSelector(state => state.authReducer.signedIn)
     const [formShowed, setForm] = useState(false)
 
     useEffect(
@@ -69,6 +68,12 @@ function TodoList(props) {
 
     if (props.loader === true) {
       return (<Loader />)
+    }
+
+    if (!signedIn) {
+      return (
+        <h5>Log in first to get your own todo list</h5>
+      )
     }
 
     return(

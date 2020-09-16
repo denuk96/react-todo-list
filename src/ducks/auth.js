@@ -101,7 +101,7 @@ function* initAuthSaga() {
 	const localTokens = window.localStorage.getItem('access_token')
 	try {
 		const response = yield call(
-			getData, `${link}user_info/?access_token=${localTokens}`, 'GET'
+			getData, `${link}user_info/`, 'GET', localTokens
 		)
 		if (response.code === 200) {
 			yield call(singInUser, response.body)
@@ -127,15 +127,10 @@ function* signInRequest(action) {
 	}
 }
 
-function* signOutUser() {
-	yield call (() => { return window.localStorage.removeItem('access_token')})
-}
-
 function* tryToSignUp(action) {
 	yield put(authLoading())
 	try {
 		const response = yield call(
-			// postData, `${link}sign_up`, 'POST', action.payload
 			postData, `${link}sign_up`, 'POST', action.payload
 		)
 		if (response.code === 200) {
@@ -153,9 +148,13 @@ function* singInUser(body) {
 	yield put(signIn(body))
 }
 
+function* signOutUser() {
+	yield call (() => { return window.localStorage.removeItem('access_token')})
+}
+
 export const auth = function*() {
 	yield spawn(initAuthSaga)
 	yield takeLatest(SIGN_IN_TRY, signInRequest)
-	yield takeLatest(SIGN_OUT, signOutUser)
 	yield takeLatest(SIGN_UP_TRY, tryToSignUp)
+	yield takeLatest(SIGN_OUT, signOutUser)
 }
