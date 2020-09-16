@@ -8,16 +8,17 @@ const moduleName = 'auth'
 
 const link = 'https://young-chamber-53830.herokuapp.com/'
 
-const SIGN_IN_LOADING = `${moduleName}/signInLoading`
+const AUTH_IS_LOADING = `${moduleName}/signInLoading`
 const SIGN_IN_TRY = `${moduleName}/signInTry`
+const SIGN_UP_TRY = `${moduleName}/signUpTry`
 const SIGN_IN = `${moduleName}/signIn`
 const SIGN_OUT = `${moduleName}/signOut`
 const SET_ERROR = `${moduleName}/setError`
 const CLEAR_ERROR = `${moduleName}/clearError`
 
 // actions
-export const singInLoading = () => ({
-	type: SIGN_IN_LOADING
+export const authLoading = () => ({
+	type: AUTH_IS_LOADING
 })
 
 export const signInTry = (email, password) => ({
@@ -35,6 +36,11 @@ export const signIn = (token) => ({
 
 export const signOut = () => ({
 	type: SIGN_OUT,
+})
+
+export const signUpTry = (params) => ({
+	type: SIGN_UP_TRY,
+	payload: params
 })
 
 export const setError = (error) => ({
@@ -75,7 +81,7 @@ export function reducer(state = new ReducerRecord(), action) {
 		case CLEAR_ERROR:
 			return state.set('errors_from_server', null)
 
-		case SIGN_IN_LOADING:
+		case AUTH_IS_LOADING:
 			return state.set('loading', true)
 
 		default:
@@ -98,7 +104,7 @@ function* initAuthSaga() {
 }
 
 function* signInRequest(action) {
-	yield put(singInLoading())
+	yield put(authLoading())
 	try {
 		const response = yield call(
 			postData, `${link}sign_in`, 'POST', action.payload
@@ -119,8 +125,18 @@ function* signOutUser() {
 	yield call (() => { return window.localStorage.removeItem('access_token')})
 }
 
+function* tryToSignUp(action) {
+	yield put(authLoading())
+	try {
+
+	} catch (e) {
+
+	}
+}
+
 export const auth = function*() {
 	yield spawn(initAuthSaga)
 	yield takeLatest(SIGN_IN_TRY, signInRequest)
 	yield takeLatest(SIGN_OUT, signOutUser)
+	yield takeLatest(SIGN_UP_TRY, tryToSignUp)
 }

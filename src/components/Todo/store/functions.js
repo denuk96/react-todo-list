@@ -14,10 +14,10 @@ import {showErrors, showNotices} from "../../Message/store/actions";
 const link = 'https://young-chamber-53830.herokuapp.com/todo_items/'
 
 export function getTodosActionAsync() {
-  return function(dispatch) {
+  return function(dispatch, getState) {
+    console.log(getState())
     getData(link, 'GET')
       .then((response) => {
-        console.log(response)
         const data = response.body
         if (response.code === 200) {
           dispatch(getTodosAction(data))

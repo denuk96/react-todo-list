@@ -1,24 +1,25 @@
 import React from "react";
-import { Button, Modal, Form } from "react-bootstrap";
-import { useForm } from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
-import { signInTry } from "../../ducks/auth";
-import { Loader } from "../Loader/loader";
+import {useForm} from "react-hook-form";
+import {Button, Form, Modal} from "react-bootstrap";
+import {Loader} from "../Loader/loader";
 
-export default function SignInForm({show, toggleSignInForm}) {
+export default function SignUpForm({show, toggleSingUpForm}) {
 	const dispatch = useDispatch()
-	const { register, handleSubmit, errors } = useForm();
+	const { register, handleSubmit, errors, watch } = useForm();
 	const showLoading = useSelector(state => state.authReducer.loading)
 	const errorsFromServer = useSelector(state => state.authReducer.errors_from_server)
 
+
+	console.log(errors.passwordConfirmation)
 	const onSubmit = (data) => {
-		let { email, password } = data
-		dispatch(signInTry(email, password))
+		// let {email, password} = data
+		// dispatch(signInTry(email, password))
 	}
 
 	if (showLoading) {
 		return (
-			<Modal show={show} onHide={toggleSignInForm}>
+			<Modal show={show} onHide={toggleSingUpForm}>
 				<Modal.Header closeButton>
 				</Modal.Header>
 				<Modal.Body>
@@ -29,17 +30,18 @@ export default function SignInForm({show, toggleSignInForm}) {
 	}
 
 	return (
-		<Modal show={show} onHide={toggleSignInForm}>
+		<Modal show={show} onHide={toggleSingUpForm}>
 			<Modal.Header closeButton>
-				<Modal.Title>Sign in</Modal.Title>
+				<Modal.Title>Sign Up</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
 				{errorsFromServer != null &&
-				<h5 className='warning-message'>
-					{errorsFromServer}
-				</h5>
+					<h5 className='warning-message'>
+						{errorsFromServer}
+					</h5>
 				}
 				<Form onSubmit={handleSubmit(onSubmit)}>
+
 					<Form.Group controlId="formBasicEmail">
 						<Form.Label>Email address</Form.Label>
 						{errors.email && <p className='warning-message'>Email is required</p>}
@@ -54,11 +56,18 @@ export default function SignInForm({show, toggleSignInForm}) {
 						{errors.password && <p className='warning-message'>Password is required</p>}
 						<Form.Control ref={register({ required: true })} type="password" name="password" placeholder="Password" />
 					</Form.Group>
-					<Form.Group controlId="formBasicCheckbox">
-						<Form.Check type="checkbox" label="Check me out" />
+
+					<Form.Group controlId="formBasicPasswordConfirmation">
+						<Form.Label>Password Confirmation</Form.Label>
+						{errors.passwordConfirmation && <p className='warning-message'>Password Confirmation should match with password</p>}
+						<Form.Control ref={register({
+							required: true,
+							validate: (value) => value === watch('password') })}
+						  type="password" name="passwordConfirmation" placeholder="Password Confirmation" />
 					</Form.Group>
+
 					<Button variant="primary" type="submit">
-						Submit
+						Sign Up
 					</Button>
 				</Form>
 			</Modal.Body>

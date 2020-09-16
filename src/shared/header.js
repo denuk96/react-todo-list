@@ -5,15 +5,21 @@ import { Button } from 'react-bootstrap';
 import SignInForm from "../components/Auth/SignInForm";
 import {clearError} from "../ducks/auth";
 import SignOutButton from "../components/Auth/SignOutButton";
+import SignUpForm from "../components/Auth/SignUpForm";
 
 export default function Header() {
 	const dispatch = useDispatch()
 	const signedIn = useSelector(state => state.authReducer.signedIn)
-	const [showSignForm, setSignForm] = useState(false);
+	const [showSignInForm, setSignInForm] = useState(false);
+	const [showSignUpForm, setSignUpForm] = useState(false);
 
 	function toggleSignInForm() {
-		setSignForm(!showSignForm)
+		setSignInForm(!showSignInForm)
 		dispatch(clearError())
+	}
+
+	function toggleSingUpForm() {
+		setSignUpForm(!showSignUpForm)
 	}
 
 	return (
@@ -24,11 +30,18 @@ export default function Header() {
 						<li><Link to='/'>Home</Link></li>
 						<li><Link to='/todolist'>Todo List</Link></li>
 						{ !signedIn &&
-							<li>
-								<Button onClick={toggleSignInForm}>
-									sign in
-								</Button>
-							</li>
+							<>
+								<li>
+									<Button onClick={toggleSignInForm}>
+										Sign in
+									</Button>
+								</li>
+								<li>
+									<Button onClick={toggleSingUpForm}>
+										Sign Up
+									</Button>
+								</li>
+							</>
 						}
 						{ signedIn &&
 							<li>
@@ -39,7 +52,10 @@ export default function Header() {
 				</nav>
 			</header>
 			{!signedIn &&
-				<SignInForm show={showSignForm} toggleSignInForm={toggleSignInForm}/>
+				<>
+					<SignInForm show={showSignInForm} toggleSignInForm={toggleSignInForm}/>
+					<SignUpForm show={showSignUpForm} toggleSingUpForm={toggleSingUpForm}/>
+				</>
 			}
 		</>
 	);
