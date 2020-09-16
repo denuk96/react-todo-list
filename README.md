@@ -14,10 +14,12 @@ React Redux:
 1) ~~Make work react and redux together (class and functional components)~~
 2) ~~Create and configuring store~~
 3) ~~Actions, Dispatches, Reducers~~
-4) ~~Redux-thunk and async api calls~~
-5) Redux-saga (**in progress**)
+4) ~~Redux-thunk and async api calls~~ (has been replaced by sagas)
+5) ~~Redux-saga~~
+6) ~~Ducks pattern~~ (https://github.com/erikras/ducks-modular-redux)
 
 Common libraries:
 1) ~~React Router~~ 
 2) ~~PropTypes~~
 3) ~~Fetch~~
+4) ~~React-hook-form~~
