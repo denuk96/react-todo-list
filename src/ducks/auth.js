@@ -29,9 +29,12 @@ export const signInTry = (email, password) => ({
 	}
 })
 
-export const signIn = (token) => ({
+export const signIn = (user) => ({
 	type: SIGN_IN,
-	payload: token
+	payload: {
+		access_token: user.access_token,
+		user: user
+	}
 })
 
 export const signOut = () => ({
@@ -40,7 +43,10 @@ export const signOut = () => ({
 
 export const signUpTry = (params) => ({
 	type: SIGN_UP_TRY,
-	payload: params
+	payload: {
+		email: params.email,
+		password: params.password
+	}
 })
 
 export const setError = (error) => ({
@@ -66,7 +72,8 @@ export function reducer(state = new ReducerRecord(), action) {
 
 	switch (type) {
 		case SIGN_IN:
-			return state.set('access_token', payload)
+			return state.set('access_token', payload.access_token)
+									.set('user', payload.user)
 									.set('signedIn', true)
 									.set('errors_from_server', null)
 									.set('loading', false)
@@ -74,6 +81,7 @@ export function reducer(state = new ReducerRecord(), action) {
 		case SIGN_OUT:
 			return state.set('access_token', null)
 									.set('signedIn', false)
+									.set('user', null)
 
 		case SET_ERROR:
 			return state.set('errors_from_server', payload).set('loading', false)
@@ -96,7 +104,7 @@ function* initAuthSaga() {
 			getData, `${link}user_info/?access_token=${localTokens}`, 'GET'
 		)
 		if (response.code === 200) {
-			yield put(signIn(response.body.access_token))
+			yield call(singInUser, response.body)
 		}
 	} catch (e) {
 		yield put(showErrors('Auth server error'))
@@ -110,9 +118,7 @@ function* signInRequest(action) {
 			postData, `${link}sign_in`, 'POST', action.payload
 		)
 		if (response.code === 200) {
-			const token = response.body.access_token
-			window.localStorage.setItem('access_token', token)
-			yield put(signIn(token))
+			yield call(singInUser, response.body)
 		} else {
 			yield put(setError(response.body.errors))
 		}
@@ -128,10 +134,23 @@ function* signOutUser() {
 function* tryToSignUp(action) {
 	yield put(authLoading())
 	try {
-
+		const response = yield call(
+			// postData, `${link}sign_up`, 'POST', action.payload
+			postData, `${link}sign_up`, 'POST', action.payload
+		)
+		if (response.code === 200) {
+			yield call(singInUser, response.body)
+		} else {
+			yield put(setError(response.body.errors))
+		}
 	} catch (e) {
-
+		yield put(setError('server-error'))
 	}
+}
+
+function* singInUser(body) {
+	window.localStorage.setItem('access_token', body.access_token)
+	yield put(signIn(body))
 }
 
 export const auth = function*() {

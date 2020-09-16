@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useForm} from "react-hook-form";
 import {Button, Form, Modal} from "react-bootstrap";
 import {Loader} from "../Loader/loader";
+import {signUpTry} from "../../ducks/auth";
 
 export default function SignUpForm({show, toggleSingUpForm}) {
 	const dispatch = useDispatch()
@@ -10,11 +11,9 @@ export default function SignUpForm({show, toggleSingUpForm}) {
 	const showLoading = useSelector(state => state.authReducer.loading)
 	const errorsFromServer = useSelector(state => state.authReducer.errors_from_server)
 
-
-	console.log(errors.passwordConfirmation)
 	const onSubmit = (data) => {
-		// let {email, password} = data
-		// dispatch(signInTry(email, password))
+		let {email, password} = data
+		dispatch(signUpTry({email, password}))
 	}
 
 	if (showLoading) {
