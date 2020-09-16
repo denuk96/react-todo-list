@@ -4,8 +4,9 @@ import {useDispatch, useSelector} from "react-redux";
 import { Button } from 'react-bootstrap';
 import SignInForm from "../components/Auth/SignInForm";
 import {clearError} from "../ducks/auth";
+import SignOutButton from "../components/Auth/SignOutButton";
 
-function Header() {
+export default function Header() {
 	const dispatch = useDispatch()
 	const signedIn = useSelector(state => state.authReducer.signedIn)
 	const [showSignForm, setSignForm] = useState(false);
@@ -29,6 +30,11 @@ function Header() {
 								</Button>
 							</li>
 						}
+						{ signedIn &&
+							<li>
+								<SignOutButton/>
+							</li>
+						}
 					</ul>
 				</nav>
 			</header>
@@ -38,5 +44,3 @@ function Header() {
 		</>
 	);
 }
-
-export default Header;

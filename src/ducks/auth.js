@@ -11,6 +11,7 @@ const link = 'https://young-chamber-53830.herokuapp.com/'
 const SIGN_IN_LOADING = `${moduleName}/signInLoading`
 const SIGN_IN_TRY = `${moduleName}/signInTry`
 const SIGN_IN = `${moduleName}/signIn`
+const SIGN_OUT = `${moduleName}/signOut`
 const SET_ERROR = `${moduleName}/setError`
 const CLEAR_ERROR = `${moduleName}/clearError`
 
@@ -30,6 +31,10 @@ export const signInTry = (email, password) => ({
 export const signIn = (token) => ({
 	type: SIGN_IN,
 	payload: token
+})
+
+export const signOut = () => ({
+	type: SIGN_OUT,
 })
 
 export const setError = (error) => ({
@@ -59,6 +64,10 @@ export function reducer(state = new ReducerRecord(), action) {
 									.set('signedIn', true)
 									.set('errors_from_server', null)
 									.set('loading', false)
+
+		case SIGN_OUT:
+			return state.set('access_token', null)
+									.set('signedIn', false)
 
 		case SET_ERROR:
 			return state.set('errors_from_server', payload).set('loading', false)
@@ -106,7 +115,12 @@ function* signInRequest(action) {
 	}
 }
 
+function* signOutUser() {
+	yield call (() => { return window.localStorage.removeItem('access_token')})
+}
+
 export const auth = function*() {
 	yield spawn(initAuthSaga)
 	yield takeLatest(SIGN_IN_TRY, signInRequest)
+	yield takeLatest(SIGN_OUT, signOutUser)
 }
