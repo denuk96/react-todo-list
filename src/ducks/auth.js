@@ -3,7 +3,7 @@ import { Record } from 'immutable'
 import {getData, postData} from "../api/apiDataFetch";
 import {showErrors} from "../components/Message/store/actions";
 
-// types
+// TYPES
 const moduleName = 'auth'
 
 const link = 'https://young-chamber-53830.herokuapp.com/'
@@ -16,7 +16,46 @@ const SIGN_OUT = `${moduleName}/signOut`
 const SET_ERROR = `${moduleName}/setError`
 const CLEAR_ERROR = `${moduleName}/clearError`
 
-// actions
+// REDUCER
+const ReducerRecord = Record({
+	user: null,
+	signedIn: false,
+	loading: false,
+	access_token: null,
+	errors_from_server: null,
+})
+
+export default function reducer(state = new ReducerRecord(), action) {
+	const {type, payload} = action
+
+	switch (type) {
+		case SIGN_IN:
+			return state.set('access_token', payload.access_token)
+				.set('user', payload.user)
+				.set('signedIn', true)
+				.set('errors_from_server', null)
+				.set('loading', false)
+
+		case SIGN_OUT:
+			return state.set('access_token', null)
+				.set('signedIn', false)
+				.set('user', null)
+
+		case SET_ERROR:
+			return state.set('errors_from_server', payload).set('loading', false)
+
+		case CLEAR_ERROR:
+			return state.set('errors_from_server', null)
+
+		case AUTH_IS_LOADING:
+			return state.set('loading', true)
+
+		default:
+			return state
+	}
+}
+
+// ACTION CREATORS
 export const authLoading = () => ({
 	type: AUTH_IS_LOADING
 })
@@ -57,45 +96,6 @@ export const setError = (error) => ({
 export const clearError = () => ({
 	type: CLEAR_ERROR
 })
-
-// reducer
-const ReducerRecord = Record({
-	user: null,
-	signedIn: false,
-	loading: false,
-	access_token: null,
-	errors_from_server: null,
-})
-
-export function reducer(state = new ReducerRecord(), action) {
-	const {type, payload} = action
-
-	switch (type) {
-		case SIGN_IN:
-			return state.set('access_token', payload.access_token)
-									.set('user', payload.user)
-									.set('signedIn', true)
-									.set('errors_from_server', null)
-									.set('loading', false)
-
-		case SIGN_OUT:
-			return state.set('access_token', null)
-									.set('signedIn', false)
-									.set('user', null)
-
-		case SET_ERROR:
-			return state.set('errors_from_server', payload).set('loading', false)
-
-		case CLEAR_ERROR:
-			return state.set('errors_from_server', null)
-
-		case AUTH_IS_LOADING:
-			return state.set('loading', true)
-
-		default:
-			return state
-	}
-}
 
 function* initAuthSaga() {
 	const localTokens = window.localStorage.getItem('access_token')
