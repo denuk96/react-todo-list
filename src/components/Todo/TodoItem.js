@@ -52,7 +52,7 @@ function TodoItem({todo, index, showTodoUpdateForm, toggleTodos}) {
 
       { todo.showForm === true &&
         <div>
-          <TodoForm updateTodo={updateTodo} new={false} todoItemId={todo.id} hideFormAfterSave={hideFormAfterSave}/>
+          <TodoForm updateTodo={updateTodo} newTodo={false} todoItemId={todo.id} hideFormAfterSave={hideFormAfterSave}/>
         </div>
       }
     </li>

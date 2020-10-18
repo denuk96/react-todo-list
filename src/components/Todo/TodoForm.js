@@ -1,38 +1,30 @@
-import React from "react";
+import React, { useRef } from 'react';
 
-class TodoForm extends React.Component {
-   getString(props) {
-       let text = document.getElementById('todoForm').value
-       if (props.new === true) {
-         props.addTodos(text)
-       } else {
-         props.updateTodo(props.todoItemId, text)
-       }
+export default function TodoForm({addTodos, updateTodo, newTodo, hideFormAfterSave, todoItemId}) {
+  const todoForm = useRef(null)
+
+  function submitTodo(e) {
+    e.preventDefault();
+    const todoText = todoForm.current['todoText'].value
+    if (newTodo) {
+      addTodos(todoText)
+    } else {
+      updateTodo(todoItemId, todoText)
+      hideFormAfterSave()
     }
+  }
 
-    hideThis(props) {
-      if (props.new === false) {
-        props.hideFormAfterSave()
-      }
-    }
-
-
-    render() {
-        return (
-            <form>
-               <label>
-                  {
-                    this.props.new
-                    ? 'New TODO'
-                    : 'Update todo'
-                  }
-                  <input type="text" name="todo" id='todoForm'/>
-                  </label>
-                  <input type="submit" value="Save" className='btn btn-info'
-                         onClick={(e) =>{  e.preventDefault(); this.getString(this.props); this.hideThis(this.props) } }/>
-            </form>
-        );
-    }
+  return (
+    <form onSubmit={submitTodo.bind(null)} ref={todoForm} >
+      <label>
+        {
+          newTodo
+          ? 'New TODO'
+          : 'Update todo'
+        }
+        <input type="text" name={'todoText'} />
+      </label>
+      <input type="submit" value="Save" className='btn btn-info' />
+    </form>
+  );
 }
-
-export default TodoForm

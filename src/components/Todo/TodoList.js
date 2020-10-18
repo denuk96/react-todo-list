@@ -94,7 +94,7 @@ function TodoList(props) {
           {formShowed
             ? <div style={styles.inline} >
                 <div style={styles.inline} >
-                  <TodoForm addTodos={addTodos} new={true}/>
+                  <TodoForm addTodos={addTodos} newTodo={true}/>
                 </div>
                 <div style={styles.inline} >
                   <button className='btn btn-primary' onClick={hideForm.bind(null)}>Close</button>
