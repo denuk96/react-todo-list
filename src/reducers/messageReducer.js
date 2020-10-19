@@ -1,7 +1,7 @@
-import {initialState} from "../store/initialState";
+
 import {SHOW_NOTICE, HIDE_ERROR, HIDE_NOTICE, SHOW_ERROR} from "../components/Message/store/types";
 
-export default function messageReducer(state = initialState, action) {
+export default function messageReducer(state = {notices: '', errors: '' }, action) {
 	const { type, playload } = action
 
 	switch (type) {

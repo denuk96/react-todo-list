@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import todoReducer from "./todoReducer";
+import todoReducer from "../ducks/todo";
 import messageReducer from "./messageReducer";
 import authReducer from "../ducks/auth";
 

@@ -16,6 +16,9 @@ const SIGN_OUT = `${moduleName}/signOut`
 const SET_ERROR = `${moduleName}/setError`
 const CLEAR_ERROR = `${moduleName}/clearError`
 
+// SELECTORS
+export const getUserSignedIN = state => state.authReducer.signedIn
+
 // REDUCER
 const ReducerRecord = Record({
 	user: null,
@@ -97,6 +100,8 @@ export const clearError = () => ({
 	type: CLEAR_ERROR
 })
 
+
+// logic
 function* initAuthSaga() {
 	const localTokens = window.localStorage.getItem('access_token')
 	try {
