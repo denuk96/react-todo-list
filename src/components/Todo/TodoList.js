@@ -3,15 +3,14 @@ import Context from "../../context";
 import {connect, useSelector} from "react-redux";
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
-// import {
-  // getTodosActionAsync,
-  // toggleTodoActionAsync,
-  // updateTodoActionAsync,
-  // deleteTodoActionAsync,
-  // addTodoActionAsync,
-  // ToggleFormTodoActionAsync,
-  // ShowTodosLoader
-// } from "./store/functions";
+import {
+  tryGetTodosAction,
+  tryAddTodoAction,
+  tryToggleTodoAction,
+  tryUpdateTodoAction,
+  tryDeleteTodoAction,
+  ToggleFormTodoAction,
+} from "../../ducks/todo";
 import {Loader} from "../Loader/loader";
 
 const styles = {
@@ -30,14 +29,12 @@ function TodoList(props) {
     useEffect(
       () => {
         if (props.todos.length === 0) {
-          // props.showLoader()
           props.getTodos()
         }
       }, [],
     );
 
     function addTodos(title) {
-      // props.showLoader()
       props.addTodos(title)
       hideForm()
     }
@@ -47,7 +44,6 @@ function TodoList(props) {
     }
 
     function updateTodo(id, title) {
-      props.showLoader()
       props.updateTodo(id, title)
     }
 
@@ -117,13 +113,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // getTodos: () => dispatch(getTodosActionAsync()),
-    // addTodos: (params) => dispatch(addTodoActionAsync(params)),
-    // deleteTodos: (id) => dispatch(deleteTodoActionAsync(id)),
-    // updateTodo: (id, title) => dispatch(updateTodoActionAsync(id, title)),
-    // toggleForm: (id) => dispatch(ToggleFormTodoActionAsync(id)),
-    // toggleTodo: (todo) => dispatch(toggleTodoActionAsync(todo)),
-    // showLoader: () => dispatch(ShowTodosLoader())
+    getTodos: () => dispatch(tryGetTodosAction()),
+    addTodos: (params) => dispatch(tryAddTodoAction(params)),
+    deleteTodos: (id) => dispatch(tryDeleteTodoAction(id)),
+    updateTodo: (id, title) => dispatch(tryUpdateTodoAction(id, title)),
+    toggleForm: (id) => dispatch(ToggleFormTodoAction(id)),
+    toggleTodo: (todo) => dispatch(tryToggleTodoAction(todo)),
   };
 };
 

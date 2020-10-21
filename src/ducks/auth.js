@@ -17,7 +17,9 @@ const SET_ERROR = `${moduleName}/setError`
 const CLEAR_ERROR = `${moduleName}/clearError`
 
 // SELECTORS
+export const getAuthStat = state => state.authReducer
 export const getUserSignedIN = state => state.authReducer.signedIn
+export const getAccessToken = state => state.authReducer.access_token
 
 // REDUCER
 const ReducerRecord = Record({
