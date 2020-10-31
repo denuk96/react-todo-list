@@ -1,6 +1,6 @@
 import {call, put, spawn, takeLatest, select, takeEvery, fork} from 'redux-saga/effects'
 import {getData, postData} from "../api/apiDataFetch";
-import {getUserSignedIN, getAccessToken, getAuthStat} from "./auth";
+import {getUserSignedIN, getAccessToken, SIGN_IN_SUCCESS} from "./auth";
 import {showErrors, showNotices} from "../components/Message/store/actions";
 
 const link = 'https://young-chamber-53830.herokuapp.com/todo_items/'
@@ -19,10 +19,6 @@ export const DELETE_TODO = 'todos/deleteTodo'
 export const TOGGLE_FORM = 'todos/toggleForm'
 export const SHOW_LOADER = 'todos/showLoader'
 export const HIDE_LOADER = 'todos/hideLoader'
-
-// SELECTORS
-
-
 
 // REDUCER
 const initialState = {
@@ -105,11 +101,12 @@ export const addTodoAction = todo => {
   }
 }
 
-export const tryToggleTodoAction = id => {
+export const tryToggleTodoAction = todo => {
   return {
     type: TRY_TOGGLE_TODO,
     playload: {
-      id: id
+      id: todo.id,
+      completed: todo.completed
     }
   }
 }
@@ -222,7 +219,6 @@ function* loadTodos() {
 }
 
 function* tryAddTodo(action) {
-  console.log(action)
   yield put(showTodosLoader())
   const accessToken = yield select(getAccessToken)
   try {
@@ -232,43 +228,44 @@ function* tryAddTodo(action) {
       yield put(addTodoAction({id: data.id, title: data.title, completed: data.completed}))
       // yield put(showNotices('Todo added.'))
     } else {
-      yield put(showErrors(response.errors))
+      // yield put(showErrors(response.errors))
     }
   } catch (e) {
-    yield put(showErrors(e))
+    // yield put(showErrors(e))
   }
   yield put(hideTodosLoader())
 }
 
-function* tryToggleAddTodo(action) {
+function* tryToggleTodo(action) {
+  const {id, completed} = action.playload
+  yield put(toggleTodoAction(id))
   const accessToken = yield select(getAccessToken)
   try {
-    const response = yield call(postData, link, 'PUT', accessToken)
+    const response = yield call(postData, link + id, 'PUT', {completed: !completed}, accessToken)
     const data = response.body
-    if (response.code === 200) {
-      yield put(toggleTodoAction(action))
-    } else {
-      yield put(showErrors(data.errors))
+    if (response.code !== 200) {
+      // yield put(showErrors(e))
+      yield put(toggleTodoAction(id))
     }
   } catch (e) {
-    yield put(showErrors(e))
+    // yield put(showErrors(e))
   }
 }
 
 function* tryUpdateTodo(action) {
+  const {id, title} = action.playload
   yield put(showTodosLoader())
   const accessToken = yield select(getAccessToken)
   try {
-    const response = yield call(postData, link + action.payload.id, 'PUT', {completed: !action.playload.completed}, accessToken)
-    const data = response.body
+    const response = yield call(postData, link + id, 'PUT', {title}, accessToken)
     if (response.code === 200) {
-      yield put(updateTodoAction({id: data.id, title: data.title}))
-      yield put(showNotices('Todo Updated.'))
+      yield put(updateTodoAction(id, title))
+      // yield put(showNotices('Todo Updated.'))
     } else {
-      yield put(showErrors(data.errors))
+      // yield put(showErrors(data.errors))
     }
   } catch (e) {
-    yield put(showErrors(e))
+    // yield put(showErrors(e))
   }
   yield put(hideTodosLoader())
 }
@@ -276,25 +273,25 @@ function* tryUpdateTodo(action) {
 function* tryDeleteTodo(action) {
   const accessToken = yield select(getAccessToken)
   try {
-    const response = yield call(postData, link + action.payload.id, 'DELETE', accessToken)
+    const response = yield call(postData, link + action.playload.id, 'DELETE', {}, accessToken)
     const data = response.body
     if (response.code === 200) {
-      yield put(updateTodoAction({id: data.id, title: data.title}))
-      yield put(showNotices('Todo Updated.'))
+      yield put(deleteTodoAction(action.playload.id))
+      // yield put(showNotices('Todo Updated.'))
     } else {
-      yield put(showErrors(data.errors))
+      // yield put(showErrors(data.errors))
     }
   } catch (e) {
-    yield put(showErrors(e))
+    // yield put(showErrors(e))
   }
   yield put(hideTodosLoader())
 }
 
 export const todoSaga = function* () {
-  spawn(initTodoSaga)
+  yield takeLatest(SIGN_IN_SUCCESS, initTodoSaga)
   yield takeEvery(TRY_GET_TODOS, loadTodos)
   yield takeLatest(TRY_ADD_TODO, tryAddTodo)
-  yield takeLatest(TRY_TOGGLE_TODO, tryToggleAddTodo)
+  yield takeLatest(TRY_TOGGLE_TODO, tryToggleTodo)
   yield takeLatest(TRY_UPDATE_TODO, tryUpdateTodo)
   yield takeLatest(TRY_DELETE_TODO, tryDeleteTodo)
 }

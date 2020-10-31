@@ -8,13 +8,13 @@ const moduleName = 'auth'
 
 const link = 'https://young-chamber-53830.herokuapp.com/'
 
-const AUTH_IS_LOADING = `${moduleName}/signInLoading`
-const SIGN_IN_TRY = `${moduleName}/signInTry`
-const SIGN_UP_TRY = `${moduleName}/signUpTry`
-const SIGN_IN = `${moduleName}/signIn`
-const SIGN_OUT = `${moduleName}/signOut`
-const SET_ERROR = `${moduleName}/setError`
-const CLEAR_ERROR = `${moduleName}/clearError`
+export const AUTH_IS_LOADING = `${moduleName}/signInLoading`
+export const SIGN_IN_TRY = `${moduleName}/signInTry`
+export const SIGN_UP_TRY = `${moduleName}/signUpTry`
+export const SIGN_IN_SUCCESS = `${moduleName}/signInSuccess`
+export const SIGN_OUT = `${moduleName}/signOut`
+export const SET_ERROR = `${moduleName}/setError`
+export const CLEAR_ERROR = `${moduleName}/clearError`
 
 // SELECTORS
 export const getAuthStat = state => state.authReducer
@@ -34,7 +34,7 @@ export default function reducer(state = new ReducerRecord(), action) {
 	const {type, payload} = action
 
 	switch (type) {
-		case SIGN_IN:
+		case SIGN_IN_SUCCESS:
 			return state.set('access_token', payload.access_token)
 				.set('user', payload.user)
 				.set('signedIn', true)
@@ -74,7 +74,7 @@ export const signInTry = (email, password) => ({
 })
 
 export const signIn = (user) => ({
-	type: SIGN_IN,
+	type: SIGN_IN_SUCCESS,
 	payload: {
 		access_token: user.access_token,
 		user: user
