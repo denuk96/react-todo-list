@@ -15,17 +15,17 @@ const ReducerRecord = Record({
 })
 
 export default function messageReducer(state = new ReducerRecord(), action) {
-	const { type, playload } = action
+	const { type, payload } = action
 
 	switch (type) {
 		case SHOW_NOTICE:
-			return state = {...state, errors: [...state.errors], notices: [...state.notices, playload.notices]}
+			return state = {...state, errors: [...state.errors], notices: [...state.notices, payload.notices]}
 
 		case HIDE_NOTICE:
 			return state = {...state, notices: []}
 
 		case SHOW_ERROR:
-			return state = {...state, notices: [...state.notices], errors: state.errors.concat(playload.errors)}
+			return state = {...state, notices: [...state.notices], errors: state.errors.concat(payload.errors)}
 
 		case HIDE_ERROR:
 			return state = {...state, errors: []}
@@ -39,7 +39,7 @@ export default function messageReducer(state = new ReducerRecord(), action) {
 export const showNotices = notices => {
 	return {
 		type: SHOW_NOTICE,
-		playload: {
+		payload: {
 			notices: notices
 		}
 	}
@@ -52,7 +52,7 @@ export const hideNotices = {
 export const showErrors = errors => (
 	{
 		type: SHOW_ERROR,
-		playload: {
+		payload: {
 			errors: errors
 		}
 	}

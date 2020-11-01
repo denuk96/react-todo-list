@@ -29,18 +29,18 @@ const initialState = {
 }
 
 export default function todoReducer(state = initialState, action) {
-  const { type, playload } = action
+  const { type, payload } = action
 
   switch (type) {
     case GET_TODOS:
-      return state = {...state, todos: state.todos.concat(playload.todos), todosLoader: false}
+      return state = {...state, todos: state.todos.concat(payload.todos), todosLoader: false}
 
     case ADD_TODO:
-      return {...state, todos: state.todos.concat(playload.todo), todosLoader: false}
+      return {...state, todos: state.todos.concat(payload.todo), todosLoader: false}
 
     case TOGGLE_TODO:
       return {...state, todos: state.todos.map(todo => {
-          if (playload.id === todo.id) {
+          if (payload.id === todo.id) {
             todo.completed = !todo.completed
           }
           return todo
@@ -48,22 +48,22 @@ export default function todoReducer(state = initialState, action) {
 
     case UPDATE_TODO:
       return {...state, todosLoader: false, todos: state.todos.map(todo => {
-          if (playload.id === todo.id) {
-            todo.title = playload.title
+          if (payload.id === todo.id) {
+            todo.title = payload.title
           }
           return todo
         })}
 
     case DELETE_TODO:
       return {...state, todos: state.todos.filter(todo => {
-          if (playload.id !== todo.id) {
+          if (payload.id !== todo.id) {
             return todo
           }
         })}
 
     case TOGGLE_FORM:
       return {...state, todos: state.todos.map(todo => {
-          if (playload.id === todo.id) {
+          if (payload.id === todo.id) {
             todo.showForm = !todo.showForm
           } else {
             todo.showForm = false
@@ -86,7 +86,7 @@ export default function todoReducer(state = initialState, action) {
 export const tryAddTodoAction = todo => {
   return {
     type: TRY_ADD_TODO,
-    playload: {
+    payload: {
       todo: todo
     }
   }
@@ -95,7 +95,7 @@ export const tryAddTodoAction = todo => {
 export const addTodoAction = todo => {
   return {
     type: ADD_TODO,
-    playload: {
+    payload: {
       todo: todo
     }
   }
@@ -104,7 +104,7 @@ export const addTodoAction = todo => {
 export const tryToggleTodoAction = todo => {
   return {
     type: TRY_TOGGLE_TODO,
-    playload: {
+    payload: {
       id: todo.id,
       completed: todo.completed
     }
@@ -114,7 +114,7 @@ export const tryToggleTodoAction = todo => {
 export const toggleTodoAction = id => {
   return {
     type: TOGGLE_TODO,
-    playload: {
+    payload: {
       id: id
     }
   }
@@ -123,7 +123,7 @@ export const toggleTodoAction = id => {
 export const tryUpdateTodoAction = (id, title) => {
   return {
     type: TRY_UPDATE_TODO,
-    playload: {
+    payload: {
       id: id,
       title: title
     }
@@ -133,7 +133,7 @@ export const tryUpdateTodoAction = (id, title) => {
 export const updateTodoAction = (id, title) => {
   return {
     type: UPDATE_TODO,
-    playload: {
+    payload: {
       id: id,
       title: title
     }
@@ -143,7 +143,7 @@ export const updateTodoAction = (id, title) => {
 export const tryDeleteTodoAction = id => {
   return {
     type: TRY_DELETE_TODO,
-    playload: {
+    payload: {
       id: id
     }
   }
@@ -152,7 +152,7 @@ export const tryDeleteTodoAction = id => {
 export const deleteTodoAction = id => {
   return {
     type: DELETE_TODO,
-    playload: {
+    payload: {
       id: id
     }
   }
@@ -161,7 +161,7 @@ export const deleteTodoAction = id => {
 export const ToggleFormTodoAction = id => {
   return {
     type: TOGGLE_FORM,
-    playload: {
+    payload: {
       id: id
     }
   }
@@ -176,7 +176,7 @@ export const tryGetTodosAction = () => {
 export const getTodosAction = (todos) => {
   return {
     type: GET_TODOS,
-    playload: {
+    payload: {
       todos: todos
     }
   }
@@ -185,14 +185,14 @@ export const getTodosAction = (todos) => {
 export const showTodosLoader = () => {
   return {
     type: SHOW_LOADER,
-    playload: true
+    payload: true
   }
 }
 
 export const hideTodosLoader = () => {
   return {
     type: HIDE_LOADER,
-    playload: false
+    payload: false
   }
 }
 
@@ -222,7 +222,7 @@ function* tryAddTodo(action) {
   yield put(showTodosLoader())
   const accessToken = yield select(getAccessToken)
   try {
-    const response = yield call(postData, link, 'POST', {title: action.playload.todo}, accessToken)
+    const response = yield call(postData, link, 'POST', {title: action.payload.todo}, accessToken)
     const data = response.body
     if (response.code === 200) {
       yield put(addTodoAction({id: data.id, title: data.title, completed: data.completed}))
@@ -237,7 +237,7 @@ function* tryAddTodo(action) {
 }
 
 function* tryToggleTodo(action) {
-  const {id, completed} = action.playload
+  const {id, completed} = action.payload
   const accessToken = yield select(getAccessToken)
   try {
     const response = yield call(postData, link + id, 'PUT', {completed: !completed}, accessToken)
@@ -253,7 +253,7 @@ function* tryToggleTodo(action) {
 }
 
 function* tryUpdateTodo(action) {
-  const {id, title} = action.playload
+  const {id, title} = action.payload
   yield put(showTodosLoader())
   const accessToken = yield select(getAccessToken)
   try {
@@ -274,10 +274,10 @@ function* tryUpdateTodo(action) {
 function* tryDeleteTodo(action) {
   const accessToken = yield select(getAccessToken)
   try {
-    const response = yield call(postData, link + action.playload.id, 'DELETE', {}, accessToken)
+    const response = yield call(postData, link + action.payload.id, 'DELETE', {}, accessToken)
     const data = response.body
     if (response.code === 200) {
-      yield put(deleteTodoAction(action.playload.id))
+      yield put(deleteTodoAction(action.payload.id))
     } else {
       yield put(showErrors(data.errors))
     }
