@@ -1,7 +1,7 @@
 import {call, put, spawn, takeLatest, select, takeEvery, fork} from 'redux-saga/effects'
 import {getData, postData} from "../api/apiDataFetch";
 import {getUserSignedIN, getAccessToken, SIGN_IN_SUCCESS} from "./auth";
-import {showErrors, showNotices} from "../components/Message/store/actions";
+import {showErrors, showNotices} from "./message";
 
 const link = 'https://young-chamber-53830.herokuapp.com/todo_items/'
 
@@ -226,29 +226,29 @@ function* tryAddTodo(action) {
     const data = response.body
     if (response.code === 200) {
       yield put(addTodoAction({id: data.id, title: data.title, completed: data.completed}))
-      // yield put(showNotices('Todo added.'))
+      yield put(showNotices(`Todo added with id-${data.id}.`))
     } else {
-      // yield put(showErrors(response.errors))
+      yield put(showErrors(data.errors))
     }
   } catch (e) {
-    // yield put(showErrors(e))
+    yield put(showErrors('smth went wrong..'))
   }
   yield put(hideTodosLoader())
 }
 
 function* tryToggleTodo(action) {
   const {id, completed} = action.playload
-  yield put(toggleTodoAction(id))
   const accessToken = yield select(getAccessToken)
   try {
     const response = yield call(postData, link + id, 'PUT', {completed: !completed}, accessToken)
     const data = response.body
-    if (response.code !== 200) {
-      // yield put(showErrors(e))
+    if (response.code === 200) {
       yield put(toggleTodoAction(id))
+    } else {
+      yield put(showErrors('cant toggle'))
     }
   } catch (e) {
-    // yield put(showErrors(e))
+    yield put(showErrors(e))
   }
 }
 
@@ -258,14 +258,15 @@ function* tryUpdateTodo(action) {
   const accessToken = yield select(getAccessToken)
   try {
     const response = yield call(postData, link + id, 'PUT', {title}, accessToken)
+    const data = response.body
     if (response.code === 200) {
       yield put(updateTodoAction(id, title))
-      // yield put(showNotices('Todo Updated.'))
+      yield put(showNotices('Todo Updated.'))
     } else {
-      // yield put(showErrors(data.errors))
+      yield put(showErrors(data.errors))
     }
   } catch (e) {
-    // yield put(showErrors(e))
+    yield put(showErrors(e))
   }
   yield put(hideTodosLoader())
 }
@@ -277,12 +278,11 @@ function* tryDeleteTodo(action) {
     const data = response.body
     if (response.code === 200) {
       yield put(deleteTodoAction(action.playload.id))
-      // yield put(showNotices('Todo Updated.'))
     } else {
-      // yield put(showErrors(data.errors))
+      yield put(showErrors(data.errors))
     }
   } catch (e) {
-    // yield put(showErrors(e))
+    yield put(showErrors('smth went wrong with deleting'))
   }
   yield put(hideTodosLoader())
 }

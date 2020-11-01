@@ -1,7 +1,7 @@
 import { spawn, takeLatest, put, call } from 'redux-saga/effects'
 import { Record } from 'immutable'
 import {getData, postData} from "../api/apiDataFetch";
-import {showErrors} from "../components/Message/store/actions";
+import {showErrors} from "./message";
 
 // TYPES
 const moduleName = 'auth'

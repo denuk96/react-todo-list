@@ -1,17 +1,17 @@
 import React from "react";
-import {hideErrors, hideNotices} from "./store/actions";
+import {hideErrors, hideNotices} from "../../ducks/message";
 import {connect} from "react-redux";
 
 function Message(props) {
 	const notice = (notices) => (
 		<div className="alert alert-success" role="alert">
-			{notices.join(', ')}
+			{notices.join(' ')}
 		</div>
 	)
 
 	const error = (errors) => (
 		<div className="alert alert-danger" role="alert">
-			{errors.join(', ')}
+			{errors.join(' ')}
 		</div>
 	)
 
